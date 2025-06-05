@@ -170,7 +170,7 @@ genson==1.3.0
     # via datamodel-code-generator
 graphql-core==3.2.6
     # via hypothesis-graphql
-h11==0.14.0
+h11==0.16.0
     # via httpcore
 harfile==0.3.0
     # via schemathesis

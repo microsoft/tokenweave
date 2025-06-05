@@ -19,3 +19,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+**This project includes components derived from third-party open source software:**
+
+- Portions of this project are directly derived from the [vLLM Project](https://github.com/vllm-project/vllm), which is licensed under the Apache License, Version 2.0.
+- This project includes a small portion of code from [PyTorch](https://github.com/pytorch/pytorch), 
+which is licensed under the BSD 3-Clause License.
+
+Use of these components is governed by their respective licenses. See the `NOTICE` file and `third_party_licenses/` directory for details.

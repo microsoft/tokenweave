@@ -1,0 +1,26 @@
+{
+    "$schema": "https://json.schemastore.org/component-detection-manifest.json",
+    "version": 1,
+    "Registrations": [
+        {
+        "Component": {
+            "Type": "git",
+            "Git": {
+            "RepositoryUrl": "https://github.com/vllm-project/vllm",
+            "CommitHash": "87aaadef73543ab3e63eea933c39cee42c418e90"
+            }
+        },
+        "DevelopmentDependency": false
+        },
+        {
+        "Component": {
+            "Type": "pypi",
+            "Pypi": {
+            "Name": "torch",
+            "Version": "2.6.0"
+            }
+        },
+        "DevelopmentDependency": false
+        }
+    ]
+}

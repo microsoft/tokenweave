@@ -1,0 +1,9 @@
+This project includes components developed by:
+
+- The vLLM Project (https://github.com/vllm-project/vllm)  
+  Licensed under the Apache License, Version 2.0
+
+- The PyTorch Project (https://github.com/pytorch/pytorch)  
+  Licensed under the BSD 3-Clause License
+ 
+See the LICENSE file and the third_party_licenses directory for details.

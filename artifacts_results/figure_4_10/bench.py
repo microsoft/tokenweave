@@ -78,11 +78,11 @@ def benchmark(
     symm_mem_hdl = symm_mem.rendezvous(hidden_states, dist.group.WORLD.group_name)
 
     ground_tensor = (torch.rand((bl, hidden_size), dtype=torch.float32, device=device) * 2 - 1).to(dtype=torch.bfloat16)
-    ground_tensor *= (rank + 1) / world_size
+    ground_tensor *= (rank + 1) / (3 * world_size)
     hidden_states.copy_(ground_tensor)
 
     residual = (2 * torch.rand((bl, hidden_size), dtype=torch.float32, device=device) - 1).to(dtype=torch.bfloat16)
-    residual *= (rank + 1) / world_size
+    residual *= (rank + 1) / (3 * world_size)
     torch.cuda.synchronize()
     dist.barrier(device_ids=[device.index])
     torch.distributed.all_reduce(residual, op=dist.ReduceOp.SUM, group=dist.group.WORLD)
@@ -94,7 +94,7 @@ def benchmark(
 
     rms_norm = RMSNorm(hidden_size, eps=1e-5)
     weight_rms_norm = (2 * torch.rand(hidden_size, dtype=torch.float32, device=device) - 1).to(dtype=torch.bfloat16)
-    weight_rms_norm *= (rank + 1) / world_size
+    weight_rms_norm *= (rank + 1) / (3 * world_size)
     torch.cuda.synchronize()
     dist.barrier(device_ids=[device.index])
     torch.distributed.all_reduce(weight_rms_norm, op=dist.ReduceOp.SUM, group=dist.group.WORLD)
@@ -176,14 +176,22 @@ def benchmark(
     ref_hidden_states.copy_(original_hidden)
     ref_residual.copy_(original_residual)
 
+    torch.cuda.synchronize()
+    dist.barrier(device_ids=device_ids)
+
     torch_all_reduce()
     ref_rms_norm()
+
+    torch.cuda.synchronize()
+    dist.barrier(device_ids=device_ids)
     expected_result = ref_hidden_states.clone()
 
     def check_correctness(run_fn):
         hidden_states.copy_(original_hidden)
         residual.copy_(original_residual)
         run_fn()
+        torch.cuda.synchronize()
+        dist.barrier(device_ids=device_ids)
         return torch.allclose(expected_result, hidden_states, atol=atol, rtol=rtol)
     correct_multimem = check_correctness(lambda: (multimem_ar(full_ctas), modified_rms_norm(full_ctas)))
     correct_partial = check_correctness(lambda: (multimem_rs(rs_ctas), modified_rms_norm_partial(partial_ctas), multimem_ag(ag_ctas)))

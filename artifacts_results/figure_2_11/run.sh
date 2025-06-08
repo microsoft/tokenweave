@@ -70,6 +70,8 @@ run_benchmark() {
 log_info "Setting up the environment..."
 init_benchmark
 
+cp -rf "$SCRIPT_DIR/prefill_configs"/* "$SCRIPT_DIR/../../vllm/tokenweave_configs"
+
 for model in "${MODEL_NAME_LIST[@]}"; do
     case "$model" in
         "Llama-3.3-70B-Instruct")

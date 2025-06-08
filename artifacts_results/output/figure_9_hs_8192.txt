@@ -1,0 +1,1032 @@
+W0608 06:04:09.696000 1183924 site-packages/torch/distributed/run.py:792] 
+W0608 06:04:09.696000 1183924 site-packages/torch/distributed/run.py:792] *****************************************
+W0608 06:04:09.696000 1183924 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0608 06:04:09.696000 1183924 site-packages/torch/distributed/run.py:792] *****************************************
+INFO 06-08 06:04:12 [__init__.py:239] Automatically detected platform cuda.
+INFO 06-08 06:04:12 [__init__.py:239] Automatically detected platform cuda.
+INFO 06-08 06:04:13 [__init__.py:239] Automatically detected platform cuda.
+INFO 06-08 06:04:13 [__init__.py:239] Automatically detected platform cuda.
+INFO 06-08 06:04:13 [__init__.py:239] Automatically detected platform cuda.
+INFO 06-08 06:04:13 [__init__.py:239] Automatically detected platform cuda.
+INFO 06-08 06:04:13 [__init__.py:239] Automatically detected platform cuda.
+INFO 06-08 06:04:13 [__init__.py:239] Automatically detected platform cuda.
+WARNING 06-08 06:04:22 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:22 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:22 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:22 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:22 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:22 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:22 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:22 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:22 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:23 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:23 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:23 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:04:24 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:04:24 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:04:24 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 1024
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 305.50 µs
+  offset_0                 : 316.42 µs
+  offset_64                : 384.35 µs
+  offset_128               : 384.58 µs
+  offset_192               : 400.77 µs
+  offset_256               : 358.72 µs
+  smart_us                 : 316.42 µs
+==========================
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:08 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:08 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:08 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 1280
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 369.66 µs
+  offset_0                 : 455.46 µs
+  offset_64                : 473.98 µs
+  offset_128               : 399.81 µs
+  offset_192               : 445.47 µs
+  offset_256               : 445.18 µs
+  smart_us                 : 399.81 µs
+==========================
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:05:43 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:05:43 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:05:43 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 1536
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 434.08 µs
+  offset_0                 : 484.93 µs
+  offset_64                : 535.65 µs
+  offset_128               : 515.46 µs
+  offset_192               : 530.82 µs
+  offset_256               : 463.01 µs
+  smart_us                 : 463.01 µs
+==========================
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:17 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:17 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:17 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 1792
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 495.97 µs
+  offset_0                 : 572.80 µs
+  offset_64                : 588.45 µs
+  offset_128               : 541.95 µs
+  offset_192               : 591.84 µs
+  offset_256               : 574.30 µs
+  smart_us                 : 541.95 µs
+==========================
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:06:52 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:06:52 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:06:52 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 2048
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 562.46 µs
+  offset_0                 : 604.38 µs
+  offset_64                : 645.76 µs
+  offset_128               : 632.45 µs
+  offset_192               : 653.25 µs
+  offset_256               : 610.21 µs
+  smart_us                 : 604.38 µs
+==========================
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:07:27 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:07:27 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:07:27 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 2304
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 623.33 µs
+  offset_0                 : 695.78 µs
+  offset_64                : 717.44 µs
+  offset_128               : 672.93 µs
+  offset_192               : 715.42 µs
+  offset_256               : 699.65 µs
+  smart_us                 : 672.93 µs
+==========================
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:01 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:01 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:01 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 2560
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 686.34 µs
+  offset_0                 : 742.53 µs
+  offset_64                : 782.69 µs
+  offset_128               : 760.42 µs
+  offset_192               : 782.21 µs
+  offset_256               : 738.43 µs
+  smart_us                 : 738.43 µs
+==========================
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:08:36 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:08:36 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:08:36 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 2816
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 747.81 µs
+  offset_0                 : 820.64 µs
+  offset_64                : 842.08 µs
+  offset_128               : 802.46 µs
+  offset_192               : 841.41 µs
+  offset_256               : 819.81 µs
+  smart_us                 : 802.46 µs
+==========================
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:21 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:21 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 3072
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 815.68 µs
+  offset_0                 : 867.46 µs
+  offset_64                : 905.09 µs
+  offset_128               : 884.45 µs
+  offset_192               : 902.69 µs
+  offset_256               : 865.09 µs
+  smart_us                 : 865.09 µs
+==========================
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:09:56 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:09:56 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:09:56 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 3328
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 877.12 µs
+  offset_0                 : 951.90 µs
+  offset_64                : 968.67 µs
+  offset_128               : 933.54 µs
+  offset_192               : 933.12 µs
+  offset_256               : 911.26 µs
+  smart_us                 : 911.26 µs
+==========================
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:10:31 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:10:31 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 3584
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 870.43 µs
+  offset_0                 : 993.47 µs
+  offset_64                : 990.05 µs
+  offset_128               : 975.68 µs
+  offset_192               : 1,031.17 µs
+  offset_256               : 992.83 µs
+  smart_us                 : 975.68 µs
+==========================
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+WARNING 06-08 06:11:05 [config.py:4038] Current vLLM config is not set.
+WARNING 06-08 06:11:05 [config.py:1928] max_model_len was is not set. Defaulting to arbitrary value of 8192.
+WARNING 06-08 06:11:05 [config.py:1934] max_num_seqs was is not set. Defaulting to arbitrary value of 128.
+
+=== Benchmark Results ===
+BL                       : 3840
+Hidden Size              : 8192
+Data Type                : torch.bfloat16
+  baseline_us              : 960.96 µs
+  offset_0                 : 994.53 µs
+  offset_64                : 1,051.30 µs
+  offset_128               : 1,051.94 µs
+  offset_192               : 1,068.58 µs
+  offset_256               : 1,050.91 µs
+  smart_us                 : 994.53 µs
+==========================

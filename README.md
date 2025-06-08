@@ -30,8 +30,9 @@ To get started with TokenWeave:
 
 ```bash
 # use this PyTorch image: pytorch/pytorch:2.6.0-cuda12.4-cudnn9-devel
-apt-get update; apt-get upgrade -y; apt-get install kmod git build-essential -y   
+apt-get update; apt-get upgrade -y; apt-get install kmod git build-essential tmux -y   
 git clone https://github.com/microsoft/tokenweave.git
+cd tokenweave
 # Install miniconda; skip if already installed
 make install_miniconda
 bash # Refresh shell and activate
@@ -39,7 +40,7 @@ conda activate tokenweave
 make install # or pip3 install -v -e .
 make install_dependencies
 huggingface-cli login --token HF_TOKEN
-# run offline example inference example
+# run offline inference example
 make run_llama3 
 make run_qwen2
 make run_mixtral

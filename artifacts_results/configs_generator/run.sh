@@ -29,24 +29,6 @@ log_info() {
     echo "[INFO] $1"
 }
 
-check_and_install_tools() {
-    for tool in jq socat lsof; do
-        if ! command -v "$tool" &> /dev/null; then
-            apt-get update && apt-get install -y "$tool"
-        fi
-    done
-}
-
-kill_gpu_processes() {
-    log_info "Killing previous GPU processes..."
-    pgrep pt_main_thread | xargs -r kill -9
-    pgrep python3 | xargs -r kill -9
-    for port in 8000 8100 8200; do
-        lsof -t -i:$port | xargs -r kill -9
-    done
-    sleep 1
-}
-
 init_benchmark() {
     mkdir -p "$EVAL_DIR"
     echo "model_name,gpu_count,impl,chunk_offset,attn_ctas,mlp_ctas,prompt_len,avg_latency(ms)" > "$MASTER_CSV"
@@ -90,8 +72,6 @@ run_benchmark() {
 # ------------------ Main Execution ------------------
 
 log_info "Setting up the environment..."
-check_and_install_tools
-kill_gpu_processes
 init_benchmark
 
 cp "$SCRIPT_DIR/../../vllm/v1/worker/gpu_model_runner.py" "$SCRIPT_DIR/src_files/gpu_model_runner.py.orig"
@@ -161,8 +141,8 @@ nvidia-smi -pm ENABLED
 nvidia-smi -rgc
 log_info "Benchmarking completed successfully."
 
-mv "$SCRIPT_DIR/../../vllm/v1/worker/gpu_model_runner.py.orig" "$SCRIPT_DIR/../../vllm/v1/worker/gpu_model_runner.py"
-CONFIGS_DIR="$SCRIPT_DIR/../tokenweave_configs"
+mv "$SCRIPT_DIR/src_files/gpu_model_runner.py.orig" "$SCRIPT_DIR/../../vllm/v1/worker/gpu_model_runner.py"
+CONFIGS_DIR="$SCRIPT_DIR/generated_tokenweave_configs"
 mkdir -p "$CONFIGS_DIR"
 
 python3 "$SCRIPT_DIR/generator.py" "$EVAL_DIR" "$CONFIGS_DIR"

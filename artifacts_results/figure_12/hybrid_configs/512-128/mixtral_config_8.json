@@ -1,0 +1,5 @@
+{
+  "1024": { "baseline_ctas": 16, "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 0 },
+  "2048": { "baseline_ctas": 16, "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 0 },
+  "4096": { "baseline_ctas": 16, "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 256 }
+}

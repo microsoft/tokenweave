@@ -17,7 +17,7 @@ PY_FILES := llama.py qwen2.py mixtral.py
 # Create directories once
 start:
 	@mkdir -p $(OUTPUT) $(GRAPHS) $(CSVS) $(TMP)
-	@for f in $(PY_FILES); do cp ../vllm/model_executor/models/$$f $(TMP)/$$f.orig; done
+	@for f in $(PY_FILES); do cp ../vllm/model_executor/models/$$f $(TMP)$$f.orig; done
 
 # Build all figures sequentially
 all: $(FIGURES)
@@ -26,7 +26,8 @@ all: $(FIGURES)
 run_all: start
 	@echo "Running all figure computations sequentially..."
 	@$(foreach fig,$(FIGURES),echo "Running $(fig)..."; bash $(fig)/run.sh $(OUTPUT);)
-	@for f in $(PY_FILES); do mv $(TMP)/$$f.orig ../vllm/model_executor/models/$$f; done
+	@for f in $(PY_FILES); do mv $(TMP)$$f.orig ../vllm/model_executor/models/$$f; done
+	@cp -rf tokenweave_configs ../vllm
 
 # Generate all plots sequentially
 gen_all: start
@@ -38,17 +39,18 @@ $(FIGURES): start
 	@echo "Processing $@..."
 	@bash $@/run.sh $(OUTPUT)
 	@bash $@/plot.sh $(OUTPUT) $(GRAPHS) $(CSVS)
-	@for f in $(PY_FILES); do mv $(TMP)/$$f.orig ../vllm/model_executor/models/$$f; done
+	@for f in $(PY_FILES); do mv $(TMP)$$f.orig ../vllm/model_executor/models/$$f; done
+	@cp -rf tokenweave_configs ../vllm
 
 # Correctness check
 correctness_check: start
 	@bash correctness_check/run.sh $(OUTPUT)
-	@for f in $(PY_FILES); do mv $(TMP)/$$f.orig ../vllm/model_executor/models/$$f; done
+	@for f in $(PY_FILES); do mv $(TMP)$$f.orig ../vllm/model_executor/models/$$f; done
 
 # Configs Generator
 configs_generator: start
 	@bash configs_generator/run.sh $(OUTPUT)
-	@for f in $(PY_FILES); do mv $(TMP)/$$f.orig ../vllm/model_executor/models/$$f; done
+	@for f in $(PY_FILES); do mv $(TMP)$$f.orig ../vllm/model_executor/models/$$f; done
 
 # Clean generated files
 clean:
@@ -61,6 +63,7 @@ restore_files:
 	@cp qwen2_src_files/pq_overlap_fused.py ../vllm/model_executor/models/qwen2.py
 	@cp mixtral_src_files/pm_overlap_fused.py ../vllm/model_executor/models/mixtral.py
 	@cp gpu_model_runner.py ../vllm/v1/worker/gpu_model_runner.py
+	@cp -r tokenweave_configs ../vllm
 
 # Help target
 help:

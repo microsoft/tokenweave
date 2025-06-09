@@ -58,9 +58,13 @@ Our evaluation includes two types of experiments:
 To reproduce the results, use the `Makefile` in the artifact_results/ directory:
 ```bash
 cd artifact_results
+tmux new -s tokenweave_session # start a new tmux session
+conda activate tokenweave # activate the conda environment
+# run the following commands in the tmux session
 make clean
 make correctness_check # check output/ directory for the raw text generated
-make all # ~12 hrs 40 minutes
+make all # ~10 hrs 48 minutes
+make restore_files # restore the files to the original state
 ```
 The artifact scripts redirect the raw output numbers and logs to the `output/` folder, while the plotted graphs are stored
 in the `graphs/` folder. CSV files for the figures can be found in the `csvs/` directory. Results may show minor runtime 
@@ -88,4 +92,4 @@ If you use our work, please consider citing our [paper](https://arxiv.org/abs/25
 
 This repository originally started as a fork of the [vLLM project](https://github.com/rajagond/vllm/tree/87aaadef73543ab3e63eea933c39cee42c418e90) (Commit ID: 87aaade).
 
-Multimem (Multicast)-NVLS communication collective operation kernels in TokenWeave are built on top of the [pytorch implementation](https://github.com/pytorch/pytorch/blob/f6275bf0fe198f7f27569776ec221eb040a4cfa2/torch/csrc/distributed/c10d/CUDASymmetricMemoryOps.cu).
+Multimem-NVLS communication collective operation kernels in TokenWeave are built on top of the [pytorch implementation](https://github.com/pytorch/pytorch/blob/f6275bf0fe198f7f27569776ec221eb040a4cfa2/torch/csrc/distributed/c10d/CUDASymmetricMemoryOps.cu).

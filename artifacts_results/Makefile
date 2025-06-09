@@ -5,7 +5,7 @@ CSVS   ?= csvs/
 TMP    ?= tmp/
 
 # Figure definitions
-FIGURES = figure_2_11 figure_1_3 figure_5_6_7 figure_4_10 figure_9 figure_12 figure_13
+FIGURES = figure_9 figure_5_6_7 figure_2_11 figure_1_3 figure_4_10 figure_12 figure_13
 
 # MODEL FILES
 PY_FILES := llama.py qwen2.py mixtral.py
@@ -17,7 +17,6 @@ PY_FILES := llama.py qwen2.py mixtral.py
 # Create directories once
 start:
 	@mkdir -p $(OUTPUT) $(GRAPHS) $(CSVS) $(TMP)
-	@for f in $(PY_FILES); do cp ../vllm/model_executor/models/$$f $(TMP)$$f.orig; done
 
 # Build all figures sequentially
 all: $(FIGURES)
@@ -25,6 +24,7 @@ all: $(FIGURES)
 # Run all figure computations sequentially
 run_all: start
 	@echo "Running all figure computations sequentially..."
+	@for f in $(PY_FILES); do cp ../vllm/model_executor/models/$$f $(TMP)$$f.orig; done
 	@$(foreach fig,$(FIGURES),echo "Running $(fig)..."; bash $(fig)/run.sh $(OUTPUT);)
 	@for f in $(PY_FILES); do mv $(TMP)$$f.orig ../vllm/model_executor/models/$$f; done
 	@cp -rf tokenweave_configs ../vllm
@@ -37,6 +37,7 @@ gen_all: start
 # Generic figure target - works for all figures
 $(FIGURES): start
 	@echo "Processing $@..."
+	@for f in $(PY_FILES); do cp ../vllm/model_executor/models/$$f $(TMP)$$f.orig; done
 	@bash $@/run.sh $(OUTPUT)
 	@bash $@/plot.sh $(OUTPUT) $(GRAPHS) $(CSVS)
 	@for f in $(PY_FILES); do mv $(TMP)$$f.orig ../vllm/model_executor/models/$$f; done
@@ -44,11 +45,13 @@ $(FIGURES): start
 
 # Correctness check
 correctness_check: start
+	@for f in $(PY_FILES); do cp ../vllm/model_executor/models/$$f $(TMP)$$f.orig; done
 	@bash correctness_check/run.sh $(OUTPUT)
 	@for f in $(PY_FILES); do mv $(TMP)$$f.orig ../vllm/model_executor/models/$$f; done
 
 # Configs Generator
 configs_generator: start
+	@for f in $(PY_FILES); do cp ../vllm/model_executor/models/$$f $(TMP)$$f.orig; done
 	@bash configs_generator/run.sh $(OUTPUT)
 	@for f in $(PY_FILES); do mv $(TMP)$$f.orig ../vllm/model_executor/models/$$f; done
 

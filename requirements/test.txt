@@ -562,7 +562,7 @@ regex==2024.9.11
     #   sacrebleu
     #   tiktoken
     #   transformers
-requests==2.32.3
+requests==2.32.4
     # via
     #   buildkite-test-collector
     #   datasets
@@ -629,7 +629,7 @@ sentence-transformers==3.2.1
     # via -r requirements/test.in
 sentencepiece==0.2.0
     # via mistral-common
-setuptools==75.8.0
+setuptools==78.1.1
     # via
     #   mamba-ssm
     #   pytablewriter

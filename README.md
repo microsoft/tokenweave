@@ -41,9 +41,13 @@ make install # or pip3 install -v -e .
 make install_dependencies
 huggingface-cli login --token HF_TOKEN
 # run offline inference example
-make run_llama3 
 make run_qwen2
 make run_mixtral
+make run_llama3
+# NOTE: If LLaMA 3 gets stuck during the model downloading stage, 
+# please kill the process and start it again — that should resolve the issue.
+# Apparently, vllm version 0.8.5.post1 also gets stuck during model downloading
+# in my environment setup.
 ```
 
 ## Benchmarks

@@ -39,7 +39,9 @@ class RoundRobinProxy:
                     return resp
 
             except Exception as e:
-                return web.Response(text=f"Error: {str(e)}", status=500)
+                import logging
+                logging.error("An error occurred while handling the request", exc_info=True)
+                return web.Response(text="An internal error occurred.", status=500)
 
 
 async def main():

@@ -34,7 +34,7 @@ sampling_params = SamplingParams(
 print(sampling_params)
 
 # Environment settings
-os.environ["VLLM_TORCH_PROFILER_DIR"] = "./logs"
+os.environ["VLLM_TORCH_PROFILER_DIR"] = "/vllm-workspace/tokenweave"
 os.environ["VLLM_USE_V1"] = "1"
 
 # -------------------------

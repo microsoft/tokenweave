@@ -15,7 +15,7 @@ __pycache__/
 *.so
 
 *.deb
-
+*.nsys-rep
 
 # Distribution / packaging
 .Python

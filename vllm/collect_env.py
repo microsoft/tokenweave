@@ -6,7 +6,7 @@
 import datetime
 import locale
 import os
-import re
+import regex as re
 import subprocess
 import sys
 # Unlike the rest of the PyTorch this file must be python2 compliant.

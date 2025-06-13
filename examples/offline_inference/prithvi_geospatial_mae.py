@@ -20,7 +20,7 @@ python prithvi_geospatial_mae.py
 import argparse
 import datetime
 import os
-import re
+import regex as re
 from typing import Union
 
 import albumentations

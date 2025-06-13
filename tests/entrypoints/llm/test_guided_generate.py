@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
-import re
+import regex as re
 import weakref
 from enum import Enum
 

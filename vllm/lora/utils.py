@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
-import re
+import regex as re
 from typing import List, Optional, Set, Tuple, Type, Union
 
 import huggingface_hub

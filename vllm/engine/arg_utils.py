@@ -4,7 +4,7 @@
 import argparse
 import dataclasses
 import json
-import re
+import regex as re
 import threading
 from dataclasses import MISSING, dataclass, fields
 from typing import (TYPE_CHECKING, Any, Callable, Dict, List, Literal,

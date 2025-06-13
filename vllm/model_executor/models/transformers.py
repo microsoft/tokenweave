@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Wrapper around `transformers` models"""
-import re
+import regex as re
 from itertools import chain
 from typing import Iterable, Literal, Optional, Union
 

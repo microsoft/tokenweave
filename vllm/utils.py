@@ -18,7 +18,7 @@ import ipaddress
 import multiprocessing
 import os
 import pickle
-import re
+import regex as re
 import signal
 import socket
 import subprocess

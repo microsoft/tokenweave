@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
-import re
+import regex as re
 from collections.abc import Sequence
 from random import choices
 from string import ascii_letters, digits

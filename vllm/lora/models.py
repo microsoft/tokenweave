@@ -3,7 +3,7 @@
 import copy
 import math
 import os
-import re
+import regex as re
 from dataclasses import dataclass, field
 from typing import (Any, Callable, Dict, List, Optional, Sequence, Set, Type,
                     Union)

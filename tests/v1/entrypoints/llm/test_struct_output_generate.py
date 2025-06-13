@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-import re
+import regex as re
 from enum import Enum
 from typing import Any
 

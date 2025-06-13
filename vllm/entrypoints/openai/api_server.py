@@ -7,7 +7,7 @@ import importlib
 import inspect
 import multiprocessing
 import os
-import re
+import regex as re
 import signal
 import socket
 import tempfile

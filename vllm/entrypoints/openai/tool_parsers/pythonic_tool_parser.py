@@ -2,7 +2,7 @@
 
 import ast
 import json
-import re
+import regex as re
 from collections.abc import Sequence
 from typing import Any, Union
 

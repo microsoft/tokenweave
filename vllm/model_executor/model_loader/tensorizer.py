@@ -4,7 +4,7 @@ import argparse
 import dataclasses
 import io
 import os
-import re
+import regex as re
 import time
 from dataclasses import dataclass
 from functools import partial

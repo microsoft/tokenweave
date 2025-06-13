@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
-import re
+import regex as re
 from enum import Enum
 from typing import Optional
 

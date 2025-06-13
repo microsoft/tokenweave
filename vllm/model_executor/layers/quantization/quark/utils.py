@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
-import re
+import regex as re
 from types import MappingProxyType
 from typing import Any, Iterable, List, Mapping, Optional
 

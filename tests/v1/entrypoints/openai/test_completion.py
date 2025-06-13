@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
-import re
+import regex as re
 from typing import Optional
 
 import openai  # use the official client for correctness check

@@ -2,7 +2,7 @@
 
 import asyncio
 import json
-import re
+import regex as re
 import time
 from collections.abc import AsyncGenerator, AsyncIterator
 from collections.abc import Sequence as GenericSequence

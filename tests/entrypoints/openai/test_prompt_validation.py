@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # imports for guided decoding tests
-import re
+import regex as re
 
 import openai
 import pytest

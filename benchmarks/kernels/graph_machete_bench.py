@@ -2,7 +2,7 @@
 
 import math
 import pickle
-import re
+import regex as re
 from collections import defaultdict
 
 import matplotlib.pyplot as plt

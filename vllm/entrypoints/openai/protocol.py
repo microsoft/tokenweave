@@ -2,7 +2,7 @@
 
 # Adapted from
 # https://github.com/lm-sys/FastChat/blob/168ccc29d3f7edc50823016105c024fe2282732a/fastchat/protocol/openai_api_protocol.py
-import re
+import regex as re
 import time
 from argparse import Namespace
 from typing import Annotated, Any, ClassVar, Literal, Optional, Union

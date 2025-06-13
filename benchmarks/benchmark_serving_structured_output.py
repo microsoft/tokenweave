@@ -655,7 +655,7 @@ def evaluate(ret, args):
         return actual in args.choice
 
     def _eval_correctness_regex(expected, actual):
-        import re
+        import regex as re
         return re.match(args.regex, actual) is not None
 
     def _eval_correctness(expected, actual):

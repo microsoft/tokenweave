@@ -2,7 +2,7 @@
 
 # imports for guided decoding tests
 import json
-import re
+import regex as re
 import shutil
 from tempfile import TemporaryDirectory
 from typing import Optional

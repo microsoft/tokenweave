@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 import json
-import re
+import regex as re
 import sys
 from abc import ABC, abstractmethod
 from collections import defaultdict

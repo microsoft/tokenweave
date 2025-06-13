@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
-import re
+import regex as re
 from collections.abc import Sequence
 from json import JSONDecoder
 from typing import Union

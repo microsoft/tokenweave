@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
-import re
+import regex as re
 from collections.abc import Sequence
 from typing import Optional, Union
 

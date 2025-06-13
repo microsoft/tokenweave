@@ -2,7 +2,7 @@
 """Inference-only MiniMaxText01 model."""
 import copy
 import math
-import re
+import regex as re
 from typing import Dict, Iterable, List, Optional, Tuple, Union
 
 import torch

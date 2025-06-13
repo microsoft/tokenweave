@@ -2,7 +2,7 @@
 
 # imports for guided decoding tests
 import json
-import re
+import regex as re
 from typing import Optional
 
 import jsonschema

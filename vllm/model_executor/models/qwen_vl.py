@@ -7,7 +7,7 @@
 
 import copy
 import math
-import re
+import regex as re
 import unicodedata
 from collections.abc import Collection, Mapping, Sequence
 from collections.abc import Set as AbstractSet

@@ -58,5 +58,6 @@ clean:
 	@bash -c 'find . -type f -name "*.so" -exec rm -f {} +'
 	@rm -rf build dist *.egg-info raw_output*.txt debug*.txt
 	@rm -rf .venv venv
+	@rm vllm/_version.py
 	@pip3 uninstall vllm -y
 	@echo "Done."

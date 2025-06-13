@@ -30,7 +30,7 @@ install_dependencies:
 	@echo "Installing Python dependencies..."
 	@pip3 install matplotlib pandas seaborn
 	@pip install --upgrade huggingface_hub
-	@pip install flashinfer-python -i https://flashinfer.ai/whl/cu124/torch2.6/
+	@pip install https://github.com/flashinfer-ai/flashinfer/releases/download/v0.2.2.post1/flashinfer_python-0.2.2.post1+cu124torch2.6-cp38-abi3-linux_x86_64.whl
 
 # Miniconda installation
 install_miniconda:

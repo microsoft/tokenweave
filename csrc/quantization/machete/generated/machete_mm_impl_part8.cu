@@ -4,9 +4,9 @@
 namespace machete {
     
 
-struct sch_256x16_1x1x1_TmaMI__TmaCoop_streamK {
-  using TileShapeNM = Shape<_256, _16>;
-  using ClusterShape = Shape<_1, _1, _1>;
+struct sch_256x128_2x1x1_TmaMI__TmaCoop_streamK {
+  using TileShapeNM = Shape<_256, _128>;
+  using ClusterShape = Shape<_2, _1, _1>;
   // TODO: Reimplement
   // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;
   using EpilogueSchedule = cutlass::epilogue::TmaWarpSpecializedCooperative;
@@ -17,6 +17,36 @@ struct sch_256x16_1x1x1_TmaMI__TmaCoop_streamK {
 struct sch_128x128_2x1x1_TmaMI__TmaCoop_streamK {
   using TileShapeNM = Shape<_128, _128>;
   using ClusterShape = Shape<_2, _1, _1>;
+  // TODO: Reimplement
+  // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;
+  using EpilogueSchedule = cutlass::epilogue::TmaWarpSpecializedCooperative;
+  using TileScheduler    = cutlass::gemm::StreamKScheduler;
+  using EpilogueTileType = cutlass::epilogue::collective::EpilogueTileAuto;
+};
+
+struct sch_256x32_2x1x1_TmaMI__TmaCoop_streamK {
+  using TileShapeNM = Shape<_256, _32>;
+  using ClusterShape = Shape<_2, _1, _1>;
+  // TODO: Reimplement
+  // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;
+  using EpilogueSchedule = cutlass::epilogue::TmaWarpSpecializedCooperative;
+  using TileScheduler    = cutlass::gemm::StreamKScheduler;
+  using EpilogueTileType = cutlass::epilogue::collective::EpilogueTileAuto;
+};
+
+struct sch_128x64_2x1x1_TmaMI__TmaCoop_streamK {
+  using TileShapeNM = Shape<_128, _64>;
+  using ClusterShape = Shape<_2, _1, _1>;
+  // TODO: Reimplement
+  // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;
+  using EpilogueSchedule = cutlass::epilogue::TmaWarpSpecializedCooperative;
+  using TileScheduler    = cutlass::gemm::StreamKScheduler;
+  using EpilogueTileType = cutlass::epilogue::collective::EpilogueTileAuto;
+};
+
+struct sch_256x16_1x1x1_TmaMI__TmaCoop_streamK {
+  using TileShapeNM = Shape<_256, _16>;
+  using ClusterShape = Shape<_1, _1, _1>;
   // TODO: Reimplement
   // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;
   using EpilogueSchedule = cutlass::epilogue::TmaWarpSpecializedCooperative;
@@ -36,36 +66,6 @@ struct sch_128x16_1x1x1_TmaMI__TmaCoop_streamK {
 
 struct sch_128x32_2x1x1_TmaMI__TmaCoop_streamK {
   using TileShapeNM = Shape<_128, _32>;
-  using ClusterShape = Shape<_2, _1, _1>;
-  // TODO: Reimplement
-  // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;
-  using EpilogueSchedule = cutlass::epilogue::TmaWarpSpecializedCooperative;
-  using TileScheduler    = cutlass::gemm::StreamKScheduler;
-  using EpilogueTileType = cutlass::epilogue::collective::EpilogueTileAuto;
-};
-
-struct sch_256x32_2x1x1_TmaMI__TmaCoop_streamK {
-  using TileShapeNM = Shape<_256, _32>;
-  using ClusterShape = Shape<_2, _1, _1>;
-  // TODO: Reimplement
-  // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;
-  using EpilogueSchedule = cutlass::epilogue::TmaWarpSpecializedCooperative;
-  using TileScheduler    = cutlass::gemm::StreamKScheduler;
-  using EpilogueTileType = cutlass::epilogue::collective::EpilogueTileAuto;
-};
-
-struct sch_256x128_2x1x1_TmaMI__TmaCoop_streamK {
-  using TileShapeNM = Shape<_256, _128>;
-  using ClusterShape = Shape<_2, _1, _1>;
-  // TODO: Reimplement
-  // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;
-  using EpilogueSchedule = cutlass::epilogue::TmaWarpSpecializedCooperative;
-  using TileScheduler    = cutlass::gemm::StreamKScheduler;
-  using EpilogueTileType = cutlass::epilogue::collective::EpilogueTileAuto;
-};
-
-struct sch_128x64_2x1x1_TmaMI__TmaCoop_streamK {
-  using TileShapeNM = Shape<_128, _64>;
   using ClusterShape = Shape<_2, _1, _1>;
   // TODO: Reimplement
   // using KernelSchedule   = cutlass::gemm::KernelTmaWarpSpecializedCooperative;

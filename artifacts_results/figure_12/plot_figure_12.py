@@ -116,16 +116,28 @@ def main():
     os.makedirs(outdir, exist_ok=True)
 
     # Plot for GPU count 8
-    for model in ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct", "Mixtral-8x22B-Instruct-v0.1"]:
-        filtered_data = filter_and_aggregate(data, model, 8)
-        filtered_data.to_csv(os.path.join(csvdir, f'figure_12a.csv'), index=False)
-    plot_graphs(data, 8, ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct", "Mixtral-8x22B-Instruct-v0.1"], 'Hybrid (8x H100)', outdir)
+    model_list_8 = ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct", "Mixtral-8x22B-Instruct-v0.1"]
+    all_filtered_8 = pd.concat([
+        filter_and_aggregate(data, model, 8).assign(model=model)
+        for model in model_list_8
+    ], ignore_index=True)
+    # Move 'model' to the first column
+    cols_8 = ['model'] + [col for col in all_filtered_8.columns if col != 'model']
+    all_filtered_8 = all_filtered_8[cols_8]
+    all_filtered_8.to_csv(os.path.join(csvdir, 'figure_12a.csv'), index=False)
+    plot_graphs(data, 8, model_list_8, 'Hybrid (8x H100)', outdir)
 
     # Plot for GPU count 4
-    for model in ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct"]:
-        filtered_data = filter_and_aggregate(data, model, 4)
-        filtered_data.to_csv(os.path.join(csvdir, f'figure_12b.csv'), index=False)
-    plot_graphs(data, 4, ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct"], 'Hybrid (4x H100)', outdir)
+    model_list_4 = ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct"]
+    all_filtered_4 = pd.concat([
+        filter_and_aggregate(data, model, 4).assign(model=model)
+        for model in model_list_4
+    ], ignore_index=True)
+    # Move 'model' to the first column
+    cols_4 = ['model'] + [col for col in all_filtered_4.columns if col != 'model']
+    all_filtered_4 = all_filtered_4[cols_4]
+    all_filtered_4.to_csv(os.path.join(csvdir, 'figure_12b.csv'), index=False)
+    plot_graphs(data, 4, model_list_4, 'Hybrid (4x H100)', outdir)
 
 
 if __name__ == '__main__':

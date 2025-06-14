@@ -111,7 +111,10 @@ def main():
         filtered_data["chunk_size"] = cs
         all_filtered.append(filtered_data)
     combined_df = pd.concat(all_filtered, ignore_index=True)
+    cols = ['chunk_size'] + [col for col in combined_df.columns if col != 'chunk_size']
+    combined_df = combined_df[cols]
     combined_df.to_csv(os.path.join(csvdir, 'figure_13.csv'), index=False)
+
     plot_graphs(data, 8, outdir)
 
 

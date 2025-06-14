@@ -1,6 +1,6 @@
 <p align="center">
   <picture>
-    <img alt="TokenWeave" src="assets/logos/tokenweave-light.png" width="20%" height="20%">
+    <img alt="TokenWeave" src="assets/logos/tokenweave-light2.png" width="20%" height="20%">
   </picture>
 </p>
 

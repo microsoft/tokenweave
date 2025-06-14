@@ -16,7 +16,7 @@ Efficient Compute-Communication Overlap for Distributed LLM Inference
 
 **TokenWeave** is a system designed to reduce communication overhead during distributed inference of large language models (LLMs). Even with high-speed interconnects like NVLink, distributed inference can incur up to *20% performance overhead* due to communication bottlenecks.
 
-TokenWeave addresses this by introducing a **coarse-grained compute-communication overlap** mechanism that significantly improves efficiency during inference. TokenWeave is currently integrated with `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` but it can be easily extended to other similar models by modifying the model file.
+TokenWeave addresses this by introducing a **coarse-grained compute-communication overlap** mechanism that significantly improves efficiency during inference. TokenWeave is currently integrated with `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` but it can be easily extended to other similar models by modifying the model file. Please see <a href="docs/AddTokenWeave.md">how we modify LLaMA to integrate TokenWeave</a> for the steps required to integrate TokenWeave into an existing model file.
 
 ## TokenWeave nvidia nsights (nsys) profile
 

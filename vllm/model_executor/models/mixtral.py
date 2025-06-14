@@ -615,7 +615,7 @@ class MixtralModel(nn.Module):
                     "residual": residual
                 })
             return hidden_states[:num_tokens]
-        # Tokeweave
+        # TokenWeave
         nearest_multiple_of_256 = (num_tokens + 255) & ~255
         hidden_states = self.staging_buffer[:nearest_multiple_of_256]
         for layer_id in range(self.start_layer, self.end_layer):

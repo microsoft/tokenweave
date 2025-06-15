@@ -28,7 +28,7 @@ TokenWeave addresses this by introducing a **coarse-grained compute-communicatio
 
 <p align="center">
   <picture>
-    <img alt="TokenWeave-nsys-profile" src="assets/logos/tokenweave-llama-profile.png" width="90%" height="60%">
+    <img alt="TokenWeave-nsys-profile" src="assets/logos/tokenweave-llama-profile.png" width="98%" height="98%">
   </picture>
 </p>
 

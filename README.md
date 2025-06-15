@@ -43,11 +43,12 @@ apt-get update; apt-get upgrade -y; apt-get install kmod git build-essential tmu
 git clone https://github.com/microsoft/tokenweave.git
 cd tokenweave
 # Install miniconda; skip if already installed
-make install_miniconda
+make install_miniconda # 30 seconds
 bash # Refresh shell and activate
 conda activate tokenweave
-make install # or pip3 install -v -e .
-make install_dependencies
+make install # 18 minutes
+# or pip3 install -v -e .
+make install_dependencies # 17 seconds
 huggingface-cli login --token HF_TOKEN
 # run offline inference example
 make run_qwen2

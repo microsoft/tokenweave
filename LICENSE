@@ -22,7 +22,7 @@ SOFTWARE.
 
 ---
 
-**This project includes components derived from third-party open source software:**
+This project includes components derived from third-party open source software:
 
 - Portions of this project are directly derived from the [vLLM Project](https://github.com/vllm-project/vllm), which is licensed under the Apache License, Version 2.0.
 - This project includes a small portion of code from [PyTorch](https://github.com/pytorch/pytorch), 

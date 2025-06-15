@@ -1,6 +1,6 @@
 <p align="center">
   <picture>
-    <img alt="TokenWeave" src="assets/logos/tokenweave-light2.png" width="20%" height="20%">
+    <img alt="TokenWeave" src="assets/logos/tokenweave-light.png" width="20%" height="20%">
   </picture>
 </p>
 
@@ -16,7 +16,7 @@ Efficient Compute-Communication Overlap for Distributed LLM Inference
 
 **TokenWeave** is a system designed to reduce communication overhead during distributed inference of large language models (LLMs). Even with high-speed interconnects like NVLink, distributed inference can incur up to *20% performance overhead* due to communication bottlenecks.
 
-TokenWeave addresses this by introducing a **coarse-grained compute-communication overlap** mechanism that significantly improves efficiency during inference. TokenWeave is currently integrated with `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` but it can be easily extended to other similar models by modifying the model file. Please see <a href="docs/AddTokenWeave.md">how we modify LLama to integrate TokenWeave</a> for the steps required to integrate TokenWeave into an existing model file.
+TokenWeave addresses this by introducing a **coarse-grained compute-communication overlap** mechanism that significantly improves efficiency during inference. TokenWeave is currently integrated with `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` but it can be easily extended to other similar models by modifying the model file. Please see <a href="docs/AddTokenWeave.md">how we modify `llama.py` to integrate TokenWeave</a> for the steps required to integrate TokenWeave into an existing model file.
 
 ## Prerequisites
 
@@ -24,11 +24,11 @@ TokenWeave addresses this by introducing a **coarse-grained compute-communicatio
 - **Runtime environment**: Python 3.12, PyTorch 2.6.0, Ubuntu 22.04  
 - **Hardware**: 8×H100 DGX system with NVLink interconnects
 
-## TokenWeave nvidia nsights (nsys) profile
+## TokenWeave NVIDIA Nsight Systems (nsys) profile
 
 <p align="center">
   <picture>
-    <img alt="TokenWeave-nsys-profile" src="assets/logos/tokenweave-profile.png" width="90%" height="60%">
+    <img alt="TokenWeave-nsys-profile" src="assets/logos/tokenweave-llama-profile.png" width="90%" height="60%">
   </picture>
 </p>
 
@@ -94,6 +94,15 @@ variations compared to those reported in the paper, but the general trends shoul
 **To Generate Tokenweave Configs**
 ```bash
 make configs_generator # ~1 day
+```
+
+**To profile using nsys**
+```bash
+# install nsys
+wget https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2024_4/NsightSystems-linux-cli-public-2024.4.1.61-3431596.deb
+dpkg -i NsightSystems-linux-cli-public-2024.4.1.61-3431596.deb
+# run
+nsys profile -o report.nsys-rep --trace-fork-before-exec=true --cuda-graph-trace=node <script_name> <arguments>
 ```
 
 ## Citation

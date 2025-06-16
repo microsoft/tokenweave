@@ -1,0 +1,13 @@
+model,experiment,baseline_multimem,no_ar,overlap_fused
+Llama-3.3-70B-Instruct,"(512, 128)",17777.75,22043.13,21295.18
+Llama-3.3-70B-Instruct,"(1024, 128)",18032.29,22470.9,22397.34
+Llama-3.3-70B-Instruct,"(2048, 128)",19399.38,24123.47,23387.64
+Llama-3.3-70B-Instruct,ShareGPT,11388.7,14188.29,13374.38
+Qwen2.5-72B-Instruct,"(512, 128)",17299.04,21373.55,20761.59
+Qwen2.5-72B-Instruct,"(1024, 128)",17617.54,21828.4,21885.27
+Qwen2.5-72B-Instruct,"(2048, 128)",18854.4,23359.29,22859.51
+Qwen2.5-72B-Instruct,ShareGPT,11218.04,13928.97,13126.9
+Mixtral-8x22B-Instruct-v0.1,"(512, 128)",23537.0,17230.9,28925.18
+Mixtral-8x22B-Instruct-v0.1,"(1024, 128)",27444.84,30369.0,30513.02
+Mixtral-8x22B-Instruct-v0.1,"(2048, 128)",28251.53,32322.93,32189.12
+Mixtral-8x22B-Instruct-v0.1,ShareGPT,10355.37,12061.36,11384.46

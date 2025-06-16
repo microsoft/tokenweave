@@ -1,9 +1,9 @@
 {
-  "1024": { "baseline_ctas": 16, "attention_ctas": 4, "mlp_ctas": 8, "chunk_offset": 0 },
-  "2048": { "baseline_ctas": 16, "attention_ctas": 4, "mlp_ctas": 8, "chunk_offset": 0 },
-  "4096": { "baseline_ctas": 16, "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 256 },
-  "8192": { "baseline_ctas": 32, "attention_ctas": 8, "mlp_ctas": 4, "chunk_offset": 0 },
-  "16384": { "baseline_ctas": 32, "attention_ctas": 8, "mlp_ctas": 4, "chunk_offset": 0 },
-  "32768": { "baseline_ctas": 32, "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 0 },
-  "65536": { "baseline_ctas": 32, "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 256 }
+  "1024": { "attention_ctas": 4, "mlp_ctas": 8, "chunk_offset": 0 },
+  "2048": { "attention_ctas": 4, "mlp_ctas": 8, "chunk_offset": 0 },
+  "4096": { "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 256 },
+  "8192": { "attention_ctas": 8, "mlp_ctas": 4, "chunk_offset": 0 },
+  "16384": { "attention_ctas": 8, "mlp_ctas": 4, "chunk_offset": 0 },
+  "32768": { "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 0 },
+  "65536": { "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 256 }
 }

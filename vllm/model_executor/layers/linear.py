@@ -166,6 +166,16 @@ class LinearMethodBase(QuantizeMethodBase):
         Expects create_weights to have been called before on the layer."""
         raise NotImplementedError
 
+    @abstractmethod
+    def apply_inplace(self,
+              layer: torch.nn.Module,
+              x: torch.Tensor,
+              output: torch.Tensor,
+              bias: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """Apply the weights in layer to the input tensor and writes into the output tensor.
+        Expects create_weights to have been called before on the layer."""
+        raise NotImplementedError
+
 
 class UnquantizedLinearMethod(LinearMethodBase):
     """Linear method without quantization."""
@@ -190,12 +200,33 @@ class UnquantizedLinearMethod(LinearMethodBase):
 
         return F.linear(x, layer.weight, bias)
 
-    def apply_output(self,
-                    layer: torch.nn.Module,
-                    x: torch.Tensor,
-                    output: torch.Tensor,
-                ) -> torch.Tensor:
+    def apply_inplace(self,
+              layer: torch.nn.Module,
+              x: torch.Tensor,
+              output: torch.Tensor,
+              bias: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """
+        Applies a linear transformation to `x` using the weights from `layer`,
+        and writes the result in-place to `output`.
+
+        Equivalent to: output = x @ layer.weight.T + bias (if bias is provided)
+
+        Args:
+            layer (torch.nn.Module): The linear layer providing the weight (and optionally bias).
+            x (torch.Tensor): Input tensor of shape (batch_size, in_features).
+            output (torch.Tensor): Preallocated tensor for the output, shape (batch_size, out_features).
+            bias (Optional[torch.Tensor]): Optional bias tensor of shape (out_features,).
+
+        Returns:
+            torch.Tensor: The `output` tensor after applying the linear transformation.
+        """
+        # Perform matrix multiplication in-place: output = x @ W^T
         torch.matmul(x, layer.weight.t(), out=output)
+
+        # Add bias if provided
+        if bias is not None:
+            output += bias  # Broadcasting applies bias to each row
+
         return output
 
 
@@ -1275,30 +1306,32 @@ class RowParallelLinear(LinearBase):
         # Only fuse bias add into GEMM for rank 0 (this ensures that
         # bias will not get added more than once in TP>1 case)
         bias_ = None if (self.tp_rank > 0 or self.skip_bias_add) else self.bias
-        if is_tokenweave and output_ is not None:
-            ## tokenweave passes output and doesn't require bias in output
-            ## and allreduce will be done later
-            output_ = self.quant_method.apply_output(self,
-                                                      input_parallel,
-                                                      output=output_)
-            return output_
-        if output_ is not None:
-            output_parallel = self.quant_method.apply_output(self,
-                                                      input_parallel,
-                                                      bias=bias_,
-                                                      output=output_)
+
+        if is_tokenweave:
+            # TokenWeave mode: uses a preallocated output tensor
+            assert output_ is not None, "TokenWeave requires a preallocated output tensor"
+            # Apply Matrix-Multiplication in-place; AllReduce will be performed later in the decoder layer
+            output = self.quant_method.apply_inplace(
+                self,
+                input_parallel,
+                output=output_,
+                bias=bias_
+            )
+            output_bias = self.bias if self.skip_bias_add else None
+            return output, output_bias
         else:
+            # Default Mode
             output_parallel = self.quant_method.apply(self,
-                                                    input_parallel,
-                                                    bias=bias_)
-        if (self.reduce_results and self.tp_size > 1) and not is_tokenweave:
-            output = tensor_model_parallel_all_reduce(output_parallel)
-        else:
-            output = output_parallel
+                                                        input_parallel,
+                                                        bias=bias_)
+            if (self.reduce_results and self.tp_size > 1):
+                output = tensor_model_parallel_all_reduce(output_parallel)
+            else:
+                output = output_parallel
 
-        output_bias = self.bias if self.skip_bias_add else None
+            output_bias = self.bias if self.skip_bias_add else None
 
-        return output, output_bias
+            return output, output_bias
 
     def extra_repr(self) -> str:
         s = f"input_features={self.input_size_per_partition}"

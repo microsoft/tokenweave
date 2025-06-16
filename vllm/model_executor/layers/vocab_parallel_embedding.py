@@ -405,13 +405,27 @@ class VocabParallelEmbedding(torch.nn.Module):
             param[loaded_weight.shape[0]:].data.fill_(0)
 
     def forward(self, 
-                input_,
+                input_: torch.Tensor,
                 output_parallel: Optional[torch.Tensor] = None, 
                 use_pytorch_all_reduce: Optional[bool] = False,
                 is_overlap: Optional[bool] = False,
                 symm_mem_hdl: Optional[Any] = None,
                 chunk_size: Optional[int] = None,
             ):
+        """
+        Forward pass for embedding with optional tensor parallelism and communication optimizations.
+
+        Args:
+            input_ (torch.Tensor): Input
+            output_parallel (Optional[torch.Tensor]): Preallocated tensor to store the output (Token).
+            use_pytorch_all_reduce (Optional[bool]): If True, uses PyTorch's distributed all-reduce. Only needed for microbenchmarks.
+            is_overlap (Optional[bool]): If True, assumes overlapping communication and skips all-reduce on second chunk.
+            symm_mem_hdl (Optional[Any]): Symmetric memory handle used by multimem all-reduce.
+            chunk_size (Optional[int]): splits the tensor into two chunks.
+        
+        Returns:
+            torch.Tensor: hidden_states tensor (reduced across tensor parallel devices if applicable).
+        """
         if self.tp_size > 1:
             # Build the mask.
             masked_input, input_mask = get_masked_input_and_mask(
@@ -423,9 +437,9 @@ class VocabParallelEmbedding(torch.nn.Module):
         else:
             masked_input = input_
         # Get the embeddings.
-        embedding_output = self.quant_method.embedding(self,
-                                                      masked_input.long())
+        embedding_output = self.quant_method.embedding(self, masked_input.long())
 
+        # If an output tensor is preallocated, copy the result into it; otherwise, use embedding_output
         if output_parallel is not None:
             output_parallel.copy_(embedding_output)
         else:
@@ -436,26 +450,37 @@ class VocabParallelEmbedding(torch.nn.Module):
             output_parallel.masked_fill_(input_mask.unsqueeze(-1), 0)
 
         if use_pytorch_all_reduce is False and symm_mem_hdl is None:
-            # Reduce across all the model parallel GPUs.
+            # vllm default all-reduce
             output = tensor_model_parallel_all_reduce(output_parallel)
             return output
-        
 
-        # Reduce across model parallel GPUs
+        # Define a helper function to perform all-reduce based on config
         def allreduce(tensor, offset=0):
             if symm_mem_hdl is None or use_pytorch_all_reduce:
+                # Use PyTorch Distributed all-reduce
                 pytorch_all_reduce(tensor)
             else:
+                # Use multimem--based all-reduce for optimized communication
                 multimem_all_reduce(tensor, symm_mem_hdl, offset, MAX_CTAS=8)
-    
+
+        # If chunking is enabled, perform all-reduce in two steps
         if chunk_size is not None:
+            # First chunk
             allreduce(output_parallel[:chunk_size])
+            # In TokenWeave we overlap the second part of the all-reduce of layer 0
             if not is_overlap:
-                offset = (output_parallel.shape[-1] * output_parallel.element_size() * chunk_size)
+                # Calculate memory offset for the second chunk
+                offset = (
+                    output_parallel.shape[-1]
+                    * output_parallel.element_size()
+                    * chunk_size
+                )
+                # Second chunk
                 allreduce(output_parallel[chunk_size:], offset)
         else:
+            # No chunking: reduce the full tensor
             allreduce(output_parallel)
-        # Reduce across all the model parallel GPUs.
+
         return output_parallel
 
     def extra_repr(self) -> str:

@@ -29,7 +29,8 @@ namespace vllm
 
 /* 
 * ********************************************************** *
-* Code copied from Pytorch codebase                          *
+* Code copied from Pytorch codebase:                         *
+* https://github.com/pytorch/pytorch/blob/f6275bf0fe198f7f27569776ec221eb040a4cfa2/torch/csrc/distributed/c10d/CUDASymmetricMemoryOps.cu#L129                     *
 * Multimem All Reduce Meta kernel                            *
 * ********************************************************** *
 */
@@ -187,28 +188,6 @@ __device__ __forceinline__ void wait_signal(uint32_t *addr)
     ;
 }
 
-// Synchronizes blocks with matching blockIdx across participating devices.
-// Note: sync_remote_block itself is not a system level barrier/fence. It is a
-// building block for expressing different synchronization patterns.
-//
-// Pattern 0: Ensures that all writes to symm_mem buffers from previous
-// kernels across all devices are visible to the current kernel:
-//
-//   sync_remote_blocks<MemOpSem::Relaxed>(...);
-//   __syncthreads();
-//
-// Pattern 1: Ensures that all writes to symm_mem buffers from the current
-// block are visible to all remote blocks with matching blockIdx:
-//
-//   __syncthreads();
-//   sync_remote_blocks<MemOpSem::AcqRel>(...);
-//   __syncthreads();
-//
-// Pattern 2: Ensures that symm_mem buffers read by the current kernel are safe
-// for writing by subsequent kernels across all devices.
-//
-//   __syncthreads();
-//   sync_remote_blocks<MemOpSem::Relaxed>(...);
 template <MemOpSem Sem>
 __device__ __forceinline__ void sync_remote_blocks(
     uint32_t **signal_pads,

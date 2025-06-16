@@ -65,6 +65,11 @@ from functools import lru_cache
 
 @lru_cache(maxsize=None)
 def load_config(config_path="tokenweave_configs/llama_config_8.json"):
+    """
+    TokenWeave Config Loader function: Load the JSON configuration file, 
+    convert its string keys to integers, and return as a dictionary.
+    The function uses caching to avoid redundant file reads for the same config path.
+    """
     base_dir = os.path.dirname(os.path.abspath(__file__))
     full_path = os.path.normpath(os.path.join(base_dir, "..", "..", config_path))
     with open(full_path, "r") as f:
@@ -287,7 +292,7 @@ class GPUModelRunner(LoRAModelRunnerMixin):
                                         pin_memory=self.pin_memory)
         self.seq_lens_np = self.seq_lens_cpu.numpy()
 
-        #######  tokenweave ##############
+        #  -- TokenWeave: Attention Metadata --
         self.chunk_offset = 0
         world_size = get_tensor_model_parallel_world_size()
         self.config_data = None
@@ -610,12 +615,10 @@ class GPUModelRunner(LoRAModelRunnerMixin):
             self.input_batch.num_computed_tokens_cpu[:num_reqs] +
             num_scheduled_tokens)
 
-        """
-        TokenWeave specific code
-        """
+        # TokenWeave: Prepare the attention metadata to handle split attention
         tokens_1 = []
         tokens_2 = []
-        # TODO (Raja): Adding padding --- always multiple of 256
+        # (Raja): Adding padding --- always multiple of 256
         if self.config_data is not None:
             closest_len = min(self.config_data.keys(), key=lambda k: abs(k - total_num_scheduled_tokens))
             tokenweave_config = self.config_data[closest_len]
@@ -658,7 +661,6 @@ class GPUModelRunner(LoRAModelRunnerMixin):
         num_requests_2 = len(tokens_2)
         cu_num_tokens_1 = np.cumsum(num_scheduled_tokens_1)
         cu_num_tokens_2 = np.cumsum(num_scheduled_tokens_2)
-    
 
         self.query_first_loc_np[0] = 0
         self.query_second_loc_np[0] = 0
@@ -674,9 +676,8 @@ class GPUModelRunner(LoRAModelRunnerMixin):
         else:
             self.seq_lens_first_np[:num_requests_1] = self.seq_lens_np[:num_requests_1]
             self.seq_lens_second_np[:num_requests_2] = self.seq_lens_np[num_requests_1:num_reqs] 
-        """
-        TokenWeave specific code ends
-        """
+        
+        # TokenWeave: Metadata preparation ends here
 
         # Copy the tensors to the GPU.
         self.input_ids[:total_num_scheduled_tokens].copy_(
@@ -700,6 +701,7 @@ class GPUModelRunner(LoRAModelRunnerMixin):
                 scheduler_output.num_common_prefix_blocks,
             )
 
+        # Build the attention metadata along with the tokenweave metadata
         attn_metadata = self.attn_metadata_builder.build(
             num_reqs=num_reqs,
             num_actual_tokens=total_num_scheduled_tokens,

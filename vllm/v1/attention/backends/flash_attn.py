@@ -118,8 +118,7 @@ class FlashAttentionMetadata:
 
     local_attn_metadata: Optional[LocalAttentionMetadata] = None
 
-    ### TODO: optimize this tokenweave ###
-    # for tokenweave
+    # TokenWeave: To support splitting of attention
     @dataclass
     class TokenWeaveAttentionMetadata:
         max_query_len_1: int
@@ -326,12 +325,10 @@ class FlashAttentionMetadataBuilder:
               common_prefix_len: int, num_query_1: Optional[int] = None, num_query_2: Optional[int] = None,
               max_query_len_1: Optional[int] = None, max_query_len_2: Optional[int] = None,
               actual_tokens_in_split_1: Optional[int] = None, actual_tokens_in_split_2: Optional[int] = None,):
-        
+        # Build the FlashAttentionMetadata with TokenWeave support.        
         max_seq_len = self.runner.seq_lens_np[:num_reqs].max()
 
-        """ 
-            Build the FlashAttentionMetadata with TokenWeave support.
-        """
+        # for tokenweave
         max_seq_len_1 = self.runner.seq_lens_first_np[:num_query_1].max()
         query_first_loc_cpu = self.runner.query_first_loc_cpu[:num_query_1 + 1]
         query_first_loc = query_first_loc_cpu.to(self.runner.device,
@@ -453,7 +450,7 @@ class FlashAttentionMetadataBuilder:
                                           seqlens=seq_lens,
                                           max_seq_len=max_seq_len,
                                           causal=True)
-
+            # for tokenweave
             scheduler_metadata_1 = schedule(
                 batch_size=num_query_1,
                 cu_query_lens=query_first_loc,
@@ -578,9 +575,6 @@ class FlashAttentionImpl(AttentionImpl):
         output: Optional[torch.Tensor] = None,
         split_id: Optional[int] = None,
         chunk_size: Optional[int] = None,
-        split_query_start_loc: Optional[torch.Tensor] = None,
-        split_seq_first_loc: Optional[torch.Tensor] = None,
-        split_seq_second_loc: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
         """Forward pass with FlashAttention.
 
@@ -590,6 +584,9 @@ class FlashAttentionImpl(AttentionImpl):
             value: shape = [num_tokens, num_kv_heads, head_size]
             kv_cache = [2, num_blocks, block_size, num_kv_heads, head_size]
             attn_metadata: Metadata for attention.
+            output (Tensor): Shape = [num_tokens, num_heads * head_size]
+            split_id (int): 0 or 1 — 0 for the first split batch, 1 for the second.
+            chunk_size (int): Number of tokens in the first split batch.
         Returns:
             shape = [num_tokens, num_heads * head_size]
         NOTE: FP8 quantization, flash-attn expect the size of
@@ -619,11 +616,18 @@ class FlashAttentionImpl(AttentionImpl):
         # the slot_mapping's shape to determine the number of actual tokens.
         key_cache, value_cache = kv_cache.unbind(0)
 
+        # Determine the slot mapping to use based on split_id and chunk_size.
+        # If chunk_size is provided:
+        #   - Use the first `chunk_size` entries for split_id == 0 (first split batch)
+        #   - Use the remaining entries for split_id == 1 (second split batch)
+        #   - Otherwise, default to the full slot mapping
         slot_mapping = (
             attn_metadata.slot_mapping[:chunk_size] if split_id == 0 else
             attn_metadata.slot_mapping[chunk_size:] if split_id == 1 else
             attn_metadata.slot_mapping
         ) if chunk_size is not None else attn_metadata.slot_mapping
+
+        # Call the custom Torch operator to reshape and cache the key and value tensors
         torch.ops._C_cache_ops.reshape_and_cache_flash(
             key,
             value,
@@ -696,7 +700,7 @@ class FlashAttentionImpl(AttentionImpl):
                 q_slice = query[:num_actual_tokens]
                 out_slice = output[:num_actual_tokens]
 
-            # Common computation moved outside branches
+            # Common computation outside branches
             descale_shape = (cu_seqlens_q.shape[0] - 1, key.shape[1])
             q_descale = layer._q_scale.expand(descale_shape)
             k_descale = layer._k_scale.expand(descale_shape)

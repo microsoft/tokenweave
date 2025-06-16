@@ -323,16 +323,7 @@ class MixtralDecoderLayer(nn.Module):
             world_size=world_size,
             offset=rank * num_tokens_per_rank * hidden_states.shape[1] * hidden_states.element_size(),
         )
-        # multimem_all_reduce(
-        #     hidden_states[:actual_tokens],
-        #     symm_mem_hdl,
-        #     0,
-        #     MAX_CTAS=8,
-        # )
-        # self.post_attention_layernorm(
-        #     hidden_states[:actual_tokens],
-        #     residual[:actual_tokens],
-        # )
+
         self.block_sparse_moe.forward_default(hidden_states[:actual_tokens])
         next_layer_norm(
             hidden_states[rank * num_tokens_per_rank: (rank + 1) * num_tokens_per_rank], 
@@ -344,16 +335,6 @@ class MixtralDecoderLayer(nn.Module):
             world_size=world_size,
             offset=rank * num_tokens_per_rank * hidden_states.shape[1] * hidden_states.element_size(),
         )
-        # multimem_all_reduce(
-        #     hidden_states[:actual_tokens],
-        #     symm_mem_hdl,
-        #     0,
-        #     MAX_CTAS=8,
-        # )
-        # next_layer_norm(
-        #     hidden_states[:actual_tokens],
-        #     residual[:actual_tokens],
-        # )
 
         return hidden_states, residual
 

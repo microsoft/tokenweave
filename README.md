@@ -55,7 +55,7 @@ make install_dependencies # 17 seconds
 To get started with TokenWeave:
 ```bash
 huggingface-cli login --token HF_TOKEN
-# run offline inference example
+# Run offline inference examples
 make run_qwen2
 make run_mixtral
 make run_llama3
@@ -105,7 +105,6 @@ conda activate tokenweave # activate the conda environment
 make clean
 make correctness_check # check output/ directory for the raw text generated
 make all # ~10 hours 48 minutes
-make restore_files # restore the files to the original state
 # To generate the figures piece-wise
 make figure_5_6_7 # 20 minutes
 make figure_4_10 # 1 hour 25 minutes

@@ -29,11 +29,6 @@ torch::Tensor weak_ref_tensor(torch::Tensor& tensor) {
   return new_tensor;
 }
 
-// at::Tensor multimem_all_reduce_pytorch(
-//     const at::Tensor& input,
-//     std::string reduce_op,
-//     std::string group_name);
-
 void paged_attention_v1(
     torch::Tensor& out, torch::Tensor& query, torch::Tensor& key_cache,
     torch::Tensor& value_cache, int64_t num_kv_heads, double scale,
@@ -69,17 +64,11 @@ void merge_attn_states(torch::Tensor& output,
 void rms_norm(torch::Tensor& out, torch::Tensor& input, torch::Tensor& weight,
               double epsilon);
 
-void rms_norm_inplace(torch::Tensor& out, torch::Tensor& input, torch::Tensor& weight,
-              double epsilon);
-
 void fused_add_rms_norm(torch::Tensor& input, torch::Tensor& residual,
                         torch::Tensor& weight, double epsilon);
-
-void fused_add_rms_norm_cta(torch::Tensor& input,     // [..., hidden_size]
-    torch::Tensor& residual,  // [..., hidden_size]
-    torch::Tensor& weight,    // [hidden_size]
-    int64_t MAX_CTAs,
-    double epsilon) ;
+// TokenWeave Kernels
+void rms_norm_inplace(torch::Tensor& out, torch::Tensor& input, torch::Tensor& weight,
+              double epsilon);
 
 void fused_rs_ln_ag_cta(torch::Tensor& input,     // [..., hidden_size]
     torch::Tensor& residual,  // [..., hidden_size]
@@ -91,13 +80,10 @@ void fused_rs_ln_ag_cta(torch::Tensor& input,     // [..., hidden_size]
     int64_t MAX_CTAs,
     double epsilon) ;
 
-void simple_fusion_rs_ln_ag_cta(torch::Tensor& input,     // [..., hidden_size]
+// Tokenweave Artifact Kernels
+void fused_add_rms_norm_cta(torch::Tensor& input,     // [..., hidden_size]
     torch::Tensor& residual,  // [..., hidden_size]
     torch::Tensor& weight,    // [hidden_size]
-    int64_t mcptr,      // [..., hidden_size] multimem_ptr
-    int64_t signal_pads, // [..., hidden_size] signal pads
-    int64_t rank,
-    int64_t world_size,
     int64_t MAX_CTAs,
     double epsilon) ;
 
@@ -135,6 +121,16 @@ void multimem_ag_cta(
     int64_t rank,
     int64_t world_size,
     int64_t MAX_CTAs);
+
+void simple_fusion_rs_ln_ag_cta(torch::Tensor& input,     // [..., hidden_size]
+    torch::Tensor& residual,  // [..., hidden_size]
+    torch::Tensor& weight,    // [hidden_size]
+    int64_t mcptr,      // [..., hidden_size] multimem_ptr
+    int64_t signal_pads, // [..., hidden_size] signal pads
+    int64_t rank,
+    int64_t world_size,
+    int64_t MAX_CTAs,
+    double epsilon) ;
 
 void rms_norm_static_fp8_quant(torch::Tensor& out, torch::Tensor& input,
                                torch::Tensor& weight, torch::Tensor& scale,

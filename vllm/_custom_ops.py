@@ -177,19 +177,14 @@ def rms_norm(out: torch.Tensor, input: torch.Tensor, weight: torch.Tensor,
              epsilon: float) -> None:
     torch.ops._C.rms_norm(out, input, weight, epsilon)
 
-
-def rms_norm_inplace(out: torch.Tensor, input: torch.Tensor, weight: torch.Tensor,
-             epsilon: float) -> None:
-    torch.ops._C.rms_norm_inplace(out, input, weight, epsilon)
-
-
 def fused_add_rms_norm(input: torch.Tensor, residual: torch.Tensor,
                        weight: torch.Tensor, epsilon: float) -> None:
     torch.ops._C.fused_add_rms_norm(input, residual, weight, epsilon)
 
-def fused_add_rms_norm_cta(input: torch.Tensor, residual: torch.Tensor,
-                       weight: torch.Tensor, MAX_CTAs: int, epsilon: float) -> None:
-    torch.ops._C.fused_add_rms_norm_cta(input, residual, weight, MAX_CTAs, epsilon)
+# TokenWeave custom ops
+def rms_norm_inplace(out: torch.Tensor, input: torch.Tensor, weight: torch.Tensor,
+             epsilon: float) -> None:
+    torch.ops._C.rms_norm_inplace(out, input, weight, epsilon)
 
 def fused_rs_ln_ag_cta(input: torch.Tensor, residual: torch.Tensor,
                           weight: torch.Tensor, mcptr: int, signal_pads: int,
@@ -197,12 +192,10 @@ def fused_rs_ln_ag_cta(input: torch.Tensor, residual: torch.Tensor,
                             epsilon: float) -> None:
     torch.ops._C.fused_rs_ln_ag_cta(input, residual, weight, mcptr, signal_pads, rank, world_size, MAX_CTAs, epsilon)
 
-def simple_fusion_rs_ln_ag_cta(input: torch.Tensor, residual: torch.Tensor,
-                          weight: torch.Tensor, mcptr: int, signal_pads: int,
-                            rank: int, world_size: int, MAX_CTAs: int,  
-                            epsilon: float) -> None:
-    torch.ops._C.simple_fusion_rs_ln_ag_cta(input, residual, weight, mcptr, signal_pads, rank, world_size, MAX_CTAs, epsilon)
-
+# TokenWeave custom ops (Needed for the artifact)
+def fused_add_rms_norm_cta(input: torch.Tensor, residual: torch.Tensor,
+                       weight: torch.Tensor, MAX_CTAs: int, epsilon: float) -> None:
+    torch.ops._C.fused_add_rms_norm_cta(input, residual, weight, MAX_CTAs, epsilon)
 
 def fused_rs_ln_cta(input: torch.Tensor, residual: torch.Tensor,
                           weight: torch.Tensor, mcptr: int, signal_pads: int,
@@ -210,7 +203,6 @@ def fused_rs_ln_cta(input: torch.Tensor, residual: torch.Tensor,
                             epsilon: float) -> None:
     torch.ops._C.fused_rs_ln_cta(input, residual, weight, mcptr, signal_pads, rank, world_size, MAX_CTAs, epsilon)
 
-# communication collective ops
 def multimem_all_reduce(input: torch.Tensor, mcptr: int, signal_pads: int, rank: int,
                           world_size: int, MAX_CTAs: int) -> None:
     torch.ops._C.multimem_ar_cta(input, mcptr, signal_pads, rank, world_size, MAX_CTAs)
@@ -221,6 +213,12 @@ def multimem_reduce_scatter(input: torch.Tensor, mcptr: int, signal_pads: int,
 def multimem_all_gather(input: torch.Tensor, mcptr: int, signal_pads: int,
                             rank: int, world_size: int, MAX_CTAs: int) -> None:
     torch.ops._C.multimem_ag_cta(input, mcptr, signal_pads, rank, world_size, MAX_CTAs)
+
+def simple_fusion_rs_ln_ag_cta(input: torch.Tensor, residual: torch.Tensor,
+                          weight: torch.Tensor, mcptr: int, signal_pads: int,
+                            rank: int, world_size: int, MAX_CTAs: int,  
+                            epsilon: float) -> None:
+    torch.ops._C.simple_fusion_rs_ln_ag_cta(input, residual, weight, mcptr, signal_pads, rank, world_size, MAX_CTAs, epsilon)
 
 def advance_step_flashattn(num_seqs: int, num_queries: int, block_size: int,
                            input_tokens: torch.Tensor,

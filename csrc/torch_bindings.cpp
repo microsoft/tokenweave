@@ -35,11 +35,6 @@ TORCH_LIBRARY_EXPAND(TORCH_EXTENSION_NAME, ops) {
   ops.impl("get_cuda_view_from_cpu_tensor", torch::kCPU,
            &get_cuda_view_from_cpu_tensor);
 
-
-    // // All-reduce
-    // ops.def("multimem_all_reduce_pytorch(Tensor! input, str reduce_op, str group_name) -> Tensor");
-    // ops.impl("multimem_all_reduce_pytorch", torch::kCUDA,
-    //          &multimem_all_reduce_pytorch);
   // Attention ops
   // Compute the attention between an input query and the cached
   // keys/values using PagedAttention.
@@ -142,65 +137,63 @@ TORCH_LIBRARY_EXPAND(TORCH_EXTENSION_NAME, ops) {
       "()");
   ops.impl("rms_norm", torch::kCUDA, &rms_norm);
 
-  ops.def(
-    "rms_norm_inplace(Tensor! result, Tensor! input, Tensor weight, float epsilon) -> "
-    "()");
-  ops.impl("rms_norm_inplace", torch::kCUDA, &rms_norm_inplace);
-
   // In-place fused Add and RMS Normalization.
   ops.def(
       "fused_add_rms_norm(Tensor! input, Tensor! residual, Tensor weight, "
       "float epsilon) -> ()");
   ops.impl("fused_add_rms_norm", torch::kCUDA, &fused_add_rms_norm);
 
+  // TokenWeave Kernels
   ops.def(
-    "fused_add_rms_norm_cta(Tensor! input, Tensor! residual, Tensor weight, "
-    "int MAX_CTAs, float epsilon) -> ()");
-    ops.impl("fused_add_rms_norm_cta", torch::kCUDA,
+      "rms_norm_inplace(Tensor! result, Tensor! input, Tensor weight, float epsilon) -> "
+      "()");
+  ops.impl("rms_norm_inplace", torch::kCUDA, &rms_norm_inplace);
+
+  ops.def(
+      "fused_rs_ln_ag_cta(Tensor! input, Tensor! residual, Tensor weight, "
+      "int mcptr, int signal_pads, int rank, int world_size, int MAX_CTAs, "
+      "float epsilon) -> ()");
+  ops.impl("fused_rs_ln_ag_cta", torch::kCUDA,
+             &fused_rs_ln_ag_cta);
+  
+  // TokenWeave Artifact Kernels
+  ops.def(
+      "fused_add_rms_norm_cta(Tensor! input, Tensor! residual, Tensor weight, "
+      "int MAX_CTAs, float epsilon) -> ()");
+  ops.impl("fused_add_rms_norm_cta", torch::kCUDA,
              &fused_add_rms_norm_cta);
 
   ops.def(
-    "fused_rs_ln_ag_cta(Tensor! input, Tensor! residual, Tensor weight, "
-    "int mcptr, int signal_pads, int rank, int world_size, int MAX_CTAs, "
-    "float epsilon) -> ()");
-  ops.impl("fused_rs_ln_ag_cta", torch::kCUDA,
-             &fused_rs_ln_ag_cta);
-
-    ops.def(
-    "simple_fusion_rs_ln_ag_cta(Tensor! input, Tensor! residual, Tensor weight, "
-    "int mcptr, int signal_pads, int rank, int world_size, int MAX_CTAs, "
-    "float epsilon) -> ()");
-    ops.impl("simple_fusion_rs_ln_ag_cta", torch::kCUDA,
-                &simple_fusion_rs_ln_ag_cta);
-
-    ops.def(
-    "fused_rs_ln_cta(Tensor! input, Tensor! residual, Tensor weight, "
-    "int mcptr, int signal_pads, int rank, int world_size, int MAX_CTAs, "
-    "float epsilon) -> ()");
-    ops.impl("fused_rs_ln_cta", torch::kCUDA,
+      "fused_rs_ln_cta(Tensor! input, Tensor! residual, Tensor weight, "
+      "int mcptr, int signal_pads, int rank, int world_size, int MAX_CTAs, "
+      "float epsilon) -> ()");
+  ops.impl("fused_rs_ln_cta", torch::kCUDA,
                 &fused_rs_ln_cta);
 
-  // Communication Collectives
-    // All-reduce
   ops.def(
-    "multimem_ar_cta(Tensor input, int mcptr, int signal_pads, "
-    "int rank, int world_size, int MAX_CTAs) -> ()");
-    ops.impl("multimem_ar_cta", torch::kCUDA,
+      "multimem_ar_cta(Tensor input, int mcptr, int signal_pads, "
+      "int rank, int world_size, int MAX_CTAs) -> ()");
+  ops.impl("multimem_ar_cta", torch::kCUDA,
              &multimem_ar_cta);
 
-  // Reduce-scatter
   ops.def(
-    "multimem_rs_cta(Tensor input, int mcptr, int signal_pads, "
-    "int rank, int world_size, int MAX_CTAs) -> ()");
-    ops.impl("multimem_rs_cta", torch::kCUDA,
+      "multimem_rs_cta(Tensor input, int mcptr, int signal_pads, "
+      "int rank, int world_size, int MAX_CTAs) -> ()");
+  ops.impl("multimem_rs_cta", torch::kCUDA,
              &multimem_rs_cta);
-    // All-gather
+
   ops.def(
-    "multimem_ag_cta(Tensor input, int mcptr, int signal_pads, "
-    "int rank, int world_size, int MAX_CTAs) -> ()");
-    ops.impl("multimem_ag_cta", torch::kCUDA,
+      "multimem_ag_cta(Tensor input, int mcptr, int signal_pads, "
+      "int rank, int world_size, int MAX_CTAs) -> ()");
+  ops.impl("multimem_ag_cta", torch::kCUDA,
              &multimem_ag_cta);
 
+  ops.def(
+      "simple_fusion_rs_ln_ag_cta(Tensor! input, Tensor! residual, Tensor weight, "
+      "int mcptr, int signal_pads, int rank, int world_size, int MAX_CTAs, "
+      "float epsilon) -> ()");
+  ops.impl("simple_fusion_rs_ln_ag_cta", torch::kCUDA,
+                &simple_fusion_rs_ln_ag_cta);
 
   // Layernorm-quant
   // Apply Root Mean Square (RMS) Normalization to the input tensor.

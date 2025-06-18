@@ -55,7 +55,7 @@ from .utils import (AutoWeightsLoader, is_pp_missing_parameter,
                     make_empty_intermediate_tensors_factory, make_layers,
                     maybe_prefix)
 
-from .tokenweave_utils import (load_config, fused_allreduce_layernorm)
+from .tokenweave_utils import (load_config, fused_allreduce_layernorm, tokenweave_with_fuse_only, tokenweave_overlap)
 
 class MixtralMoE(nn.Module):
     """A tensor-parallel MoE implementation for Mixtral that shards each expert
@@ -270,9 +270,9 @@ class MixtralDecoderLayer(nn.Module):
         layer_id: int,
         rank: int = 0,
         world_size: int = 1,
-        next_layer_norm: Optional[RMSNorm] = None,
-        actual_tokens: Optional[int] = None,
-        nearest_multiple_of_world_size: Optional[int] = None,
+        next_layer_norm: RMSNorm = None,
+        actual_tokens: int = None,
+        nearest_multiple_of_world_size: int = None,
         MAX_CTAS_ATTN: int = 16,
         MAX_CTAS_MLP: int = 16,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
@@ -282,7 +282,7 @@ class MixtralDecoderLayer(nn.Module):
         Args:
             positions (torch.Tensor): Positional encoding indices.
             hidden_states (torch.Tensor): Input hidden states.
-            residual (Optional[torch.Tensor]): Optional residual storage.
+            residual (Optional[torch.Tensor]): Optional Residual.
             symm_mem_hdl (Any): Symmetric memory handle for all-reduce.
             layer_id (int): Current layer index.
             rank (int): Local process rank.
@@ -300,47 +300,24 @@ class MixtralDecoderLayer(nn.Module):
         assert nearest_multiple_of_world_size is not None, "nearest_multiple_of_world_size must be set"
         assert next_layer_norm is not None, "next_layer_norm must be provided"
 
-        num_tokens_per_rank = nearest_multiple_of_world_size // world_size
-
-        if residual is None:
-            residual = torch.empty_like(hidden_states)
-        if layer_id == 0:
-            self.input_layernorm(hidden_states, out=residual)
-
-        # === Self-Attention (non-overlapping) ===
-        self.self_attn(
-            positions=positions,
-            hidden_states=hidden_states[:actual_tokens]
+        return tokenweave_with_fuse_only(
+            self,
+            *(
+                positions,
+                hidden_states,
+                residual,
+                symm_mem_hdl,
+                layer_id,
+                rank,
+                world_size,
+                next_layer_norm,
+                actual_tokens,
+                nearest_multiple_of_world_size,
+                MAX_CTAS_ATTN,
+                MAX_CTAS_MLP,
+                self.block_sparse_moe.forward,
+            )
         )
-
-        # === Post-Attention Norm (fused residual add + RMSNorm + allreduce) ===
-        fused_allreduce_layernorm(
-            layernorm=self.post_attention_layernorm,
-            hidden_states=hidden_states,
-            residual=residual,
-            symm_mem_hdl=symm_mem_hdl,
-            num_tokens_per_rank=num_tokens_per_rank,
-            rank=rank,
-            world_size=world_size,
-            MAX_CTAS=MAX_CTAS_ATTN,
-        )
-
-        # === block_sparse_moe ===
-        self.block_sparse_moe(hidden_states[:actual_tokens])
-
-        # === Final Norm ((fused residual add + RMSNorm + allreduce)) ===
-        fused_allreduce_layernorm(
-            layernorm=next_layer_norm,
-            hidden_states=hidden_states,
-            residual=residual,
-            symm_mem_hdl=symm_mem_hdl,
-            num_tokens_per_rank=num_tokens_per_rank,
-            rank=rank,
-            world_size=world_size,
-            MAX_CTAS=MAX_CTAS_MLP,
-        )
-
-        return hidden_states, residual
 
 
     def forward_tokenweave(
@@ -353,12 +330,12 @@ class MixtralDecoderLayer(nn.Module):
         end_layer: Optional[int] = None,
         rank: int = 0,
         world_size: int = 1,
-        current_stream: Optional[torch.cuda.Stream] = None,
-        copy_stream: Optional[torch.cuda.Stream] = None,
-        next_layer_norm: Optional[RMSNorm] = None,
-        chunk_size: Optional[int] = None,
-        actual_tokens: Optional[int] = None,
-        nearest_multiple_of_256: Optional[int] = None,
+        current_stream: torch.cuda.Stream = None,
+        copy_stream: torch.cuda.Stream = None,
+        next_layer_norm: RMSNorm = None,
+        chunk_size: int = None,
+        actual_tokens: int = None,
+        nearest_multiple_of_256: int = None,
         MAX_CTAS_ATTN: int = 16,
         MAX_CTAS_MLP: int = 16,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
@@ -372,144 +349,30 @@ class MixtralDecoderLayer(nn.Module):
         assert chunk_size is not None and actual_tokens is not None, "chunk_size and actual_tokens are required"
         assert current_stream is not None and copy_stream is not None, "CUDA streams must be provided"
         assert next_layer_norm is not None, "next_layer_norm must be provided"
-        num_bytes_per_token = hidden_states.shape[1] * hidden_states.element_size()
-        # Self Attention
-        offset_second = chunk_size * hidden_states.shape[1] * hidden_states.element_size()
-        if residual is None:
-            residual = torch.empty_like(hidden_states)
-        # Split hidden states and residuals
-        hidden_states_1, hidden_states_2 = hidden_states[:chunk_size], hidden_states[chunk_size:]
-        residual_1, residual_2 = residual[:chunk_size], residual[chunk_size:]
-        blpr_1 = chunk_size // world_size
-        blpr_2 = hidden_states_2.shape[0] // world_size
-
-        # === LayerNorm & Comm for First Layer ===
-        if layer_id == 0:
-            hidden_states_1 = self.input_layernorm(hidden_states_1, out=residual_1)
-            multimem_reduce_scatter(
-                hidden_states_2,
+        
+        return tokenweave_overlap(
+            self,
+            * (
+                positions,
+                hidden_states,
+                residual,
                 symm_mem_hdl,
-                offset_second,
-                MAX_CTAS=8
-            )
-            self.input_layernorm(
-                hidden_states_2[rank * blpr_2: (rank + 1) * blpr_2], 
-                out=residual_2[rank * blpr_2: (rank + 1) * blpr_2])
-            symm_mem_hdl.barrier(channel=7)
-            multimem_all_gather_async(
-                hidden_states_2,
-                symm_mem_hdl,
-                offset_second,
-                blpr_2 * num_bytes_per_token,
+                layer_id,
+                end_layer,
+                rank,
+                world_size,
                 current_stream,
+                copy_stream,
+                next_layer_norm,
+                chunk_size,
+                actual_tokens,
+                nearest_multiple_of_256,
+                MAX_CTAS_ATTN,
+                MAX_CTAS_MLP,
+                self.block_sparse_moe.forward,
             )
-            symm_mem_hdl.barrier(channel=9)
-        else:
-            # # === Fused all reduce + Pre-Attn Norm + residual add on split-1 ===
-            with torch.cuda.stream(copy_stream):
-                copy_stream.wait_stream(current_stream)
-                fused_allreduce_layernorm(
-                    layernorm=self.input_layernorm,
-                    hidden_states=hidden_states_2,
-                    residual=residual_2,
-                    symm_mem_hdl=symm_mem_hdl,
-                    num_tokens_per_rank=blpr_2,
-                    rank=rank,
-                    world_size=world_size,
-                    MAX_CTAS=MAX_CTAS_ATTN,
-                    offset_symm_mem=offset_second
-                )
-        # === Self-Attn on split-0 ===
-        with torch.cuda.stream(current_stream):
-            hidden_states_1 = self.self_attn(
-                positions=positions[:chunk_size],
-                hidden_states=hidden_states_1,
-                split_id=0,
-                chunk_size=chunk_size,
-                num_actual_tokens=chunk_size,
-            )
-            current_stream.wait_stream(copy_stream)
+        )
 
-        # === Fused all reduce + Post-Attn Norm + residual add on split-0 ===
-        with torch.cuda.stream(copy_stream):
-            copy_stream.wait_stream(current_stream)
-            fused_allreduce_layernorm(
-                layernorm=self.post_attention_layernorm,
-                hidden_states=hidden_states_1,
-                residual=residual_1,
-                symm_mem_hdl=symm_mem_hdl,
-                num_tokens_per_rank=blpr_1,
-                rank=rank,
-                world_size=world_size,
-                MAX_CTAS=MAX_CTAS_ATTN,
-                offset_symm_mem=0
-            )
-        
-        # === Self-Attn on split-1 ===
-        with torch.cuda.stream(current_stream):
-            hidden_states_2 = self.self_attn(
-                positions=positions[chunk_size:],
-                hidden_states=hidden_states_2,
-                split_id=1,
-                chunk_size=chunk_size,
-                num_actual_tokens=actual_tokens - chunk_size,
-            )
-            current_stream.wait_stream(copy_stream)
-        
-        # === Fused all reduce + Post-Attn Norm + residual add on split-1 ===
-        with torch.cuda.stream(copy_stream):
-            copy_stream.wait_stream(current_stream)
-            fused_allreduce_layernorm(
-                layernorm=self.post_attention_layernorm,
-                hidden_states=hidden_states_2,
-                residual=residual_2,
-                symm_mem_hdl=symm_mem_hdl,
-                num_tokens_per_rank=blpr_2,
-                rank=rank,
-                world_size=world_size,
-                MAX_CTAS=MAX_CTAS_MLP,
-                offset_symm_mem=offset_second
-            )
-
-        # === block_sparse_moe on split-0 ===
-        with torch.cuda.stream(current_stream):
-            hidden_states_1 = self.block_sparse_moe(hidden_states_1)
-            current_stream.wait_stream(copy_stream)
-
-        # === Fused all reduce + Post-block_sparse_moe Norm + residual add on split-0 ===
-        with torch.cuda.stream(copy_stream):
-            copy_stream.wait_stream(current_stream)
-            fused_allreduce_layernorm(
-                layernorm=next_layer_norm,
-                hidden_states=hidden_states_1,
-                residual=residual_1,
-                symm_mem_hdl=symm_mem_hdl,
-                num_tokens_per_rank=blpr_1,
-                rank=rank,
-                world_size=world_size,
-                MAX_CTAS=MAX_CTAS_ATTN,
-                offset_symm_mem=0
-            )
-        
-        # === block_sparse_moe on split-1 ===
-        with torch.cuda.stream(current_stream):
-            hidden_states_2 = self.block_sparse_moe(hidden_states_2)
-            current_stream.wait_stream(copy_stream)    
-
-        # === Fused all reduce + Post-block_sparse_moe Norm + residual add on split-1 (only on last layer) ===
-        if layer_id == end_layer - 1:
-            fused_allreduce_layernorm(
-                layernorm=next_layer_norm,
-                hidden_states=hidden_states_2,
-                residual=residual_2,
-                symm_mem_hdl=symm_mem_hdl,
-                num_tokens_per_rank=blpr_2,
-                rank=rank,
-                world_size=world_size,
-                MAX_CTAS=16 if actual_tokens < 16384 else 32,
-                offset_symm_mem=offset_second
-            )
-        return hidden_states, residual
 
 
 @support_torch_compile

@@ -69,9 +69,9 @@ Our evaluation includes two types of experiments:
 - End-to-end LLM performance
  (Figures 11, 12, and 13)
 
-To reproduce the results, use the `Makefile` in the `artifact_results/` directory:
+To reproduce the results, use the `Makefile` in the `artifact/` directory:
 ```bash
-cd artifact_results
+cd artifact
 tmux new -s tokenweave_session # start a new tmux session
 conda activate tokenweave # activate the conda environment
 # run the following commands in the tmux session

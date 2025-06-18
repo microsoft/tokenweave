@@ -234,6 +234,8 @@ set(VLLM_EXT_SRC
   "csrc/pos_encoding_kernels.cu"
   "csrc/activation_kernels.cu"
   "csrc/layernorm_kernels.cu"
+  "csrc/tokenweave_fused_kernels.cu"
+  "csrc/tokenweave_artifact_kernels.cu"
   "csrc/layernorm_quant_kernels.cu"
   "csrc/cuda_view.cu"
   "csrc/quantization/gptq/q_gemm.cu"

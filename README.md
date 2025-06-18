@@ -18,7 +18,7 @@ Efficient Compute-Communication Overlap for Distributed LLM Inference
 
 TokenWeave addresses this by introducing a **coarse-grained compute-communication overlap** mechanism that significantly improves efficiency during inference. TokenWeave is currently integrated with `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` but it can be easily extended to other similar models by modifying the model file. Please see <a href="docs/AddTokenWeave.md">how we modify `llama.py` to integrate TokenWeave</a> for the steps required to integrate TokenWeave into an existing model file.
 
-## TokenWeave NVIDIA Nsight Systems (nsys) profile
+### TokenWeave NVIDIA Nsight Systems (nsys) profile
 
 <p align="center">
   <picture>
@@ -34,10 +34,9 @@ TokenWeave addresses this by introducing a **coarse-grained compute-communicatio
 
 ## Installation
 
-To get started with TokenWeave:
-
 To ease the setup, we recommend using either of these two Docker images:
-`pytorch/pytorch:2.6.0-cuda12.4-cudnn9-devel` or `vllm/vllm-openai:v0.8.5`
+- `pytorch/pytorch:2.6.0-cuda12.4-cudnn9-devel` or 
+- `vllm/vllm-openai:v0.8.5`
 ```bash
 apt-get update; apt-get upgrade -y; apt-get install kmod git build-essential tmux -y   
 git clone https://github.com/microsoft/tokenweave.git
@@ -47,11 +46,13 @@ make install_miniconda # 30 seconds
 bash # Refresh shell and activate
 conda activate tokenweave
 make install # 18 minutes
-# or pip3 install -v -e .
+# or alternatively:
+pip3 install -v -e .
 make install_dependencies # 17 seconds
 ```
 
 ## Quick Start
+To get started with TokenWeave:
 ```bash
 huggingface-cli login --token HF_TOKEN
 # run offline inference example
@@ -64,7 +65,9 @@ make run_llama3
 # on the environment setup.
 ```
 **To Generate Tokenweave Configs (Optional)**
+
 If you want to generate TokenWeave configs for a new model, you can use the configs_generator script and modify it as needed. We have already provided configs for `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` on 8xH100.
+
 ```bash
 cd artifact
 tmux new -s tokenweave_session  # Start a new tmux session
@@ -72,6 +75,7 @@ conda activate tokenweave       # Activate the conda environment
 # Run the following command in the tmux session to generate configs for
 # `LLaMA-3.3-70B`, `Qwen2.5-72B`, and `Mixtral-8x22B`
 make configs_generator          # Takes approximately 1 day
+cd .. # Go back to the tokenweave directory
 ```
 
 **To profile using nsys**
@@ -100,16 +104,16 @@ conda activate tokenweave # activate the conda environment
 # run the following commands in the tmux session
 make clean
 make correctness_check # check output/ directory for the raw text generated
-make all # ~10 hrs 48 minutes
+make all # ~10 hours 48 minutes
 make restore_files # restore the files to the original state
 # To generate the figures piece-wise
-make figure_5_6_7 # 20 minutes 
-make figure_4_10 # 1 hr 25 minutes 
+make figure_5_6_7 # 20 minutes
+make figure_4_10 # 1 hour 25 minutes
 make figure_9 # 8 minutes
-make figure_1_3 # 3 hr 25 minutes
-make figure_2_11 # 1 hr 10 minutes
-make figure_12 # 2 hr 34 minutes
-make figure_13 # 1 hr 52 minutes
+make figure_1_3 # 3 hours 25 minutes
+make figure_2_11 # 1 hour 10 minutes
+make figure_12 # 2 hours 34 minutes
+make figure_13 # 1 hour 52 minutes
 ```
 The artifact scripts redirect the raw output numbers and logs to the `output/` folder, while the plotted graphs are stored
 in the `graphs/` folder. CSV files for the figures can be found in the `csvs/` directory. Results may show minor runtime 

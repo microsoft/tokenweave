@@ -13,16 +13,7 @@ from vllm.distributed.triton_comm.triton_comm import (
 from vllm.distributed import (get_pp_group, get_tensor_model_parallel_rank, get_device_group,
                               get_tensor_model_parallel_world_size,
                               pytorch_all_reduce)
-import json
-from functools import lru_cache
-# --- TokenWeave Configuration Loader ---
-@lru_cache(maxsize=None)
-def load_config(config_path="tokenweave_configs/llama_config_8.json"):
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    full_path = os.path.normpath(os.path.join(base_dir, "..", "..", config_path))
-    with open(full_path, "r") as f:
-        data = json.load(f)
-    return {int(k): v for k, v in data.items()}
+from .tokenweave_utils import (load_config, tokenweave_with_fuse_only, tokenweave_overlap)
 ```
 
 ### class LlamaMLP(nn.Module):
@@ -38,7 +29,6 @@ def forward(self, x):
 def forward(self, hidden_states):
     x, _ = self.gate_up_proj(hidden_states)
     x = self.act_fn(x)
-    # in-place, no all-reduce
     self.down_proj(x, hidden_states, is_tokenweave=True)
     return hidden_states
 ```
@@ -68,11 +58,40 @@ def forward(
     chunk_size: Optional[int] = None,
     num_actual_tokens: Optional[int] = None,
 ) -> torch.Tensor:
+    """
+    Forward pass for the attention layer with optional TokenWeave mode.
+    """
+    # ----------------------------------------
+    # Arguments:
+    # - positions: Tensor containing positional indices for rotary embeddings.
+    #              Shape: [num_tokens]
+    #
+    # - hidden_states: Input tensor containing embeddings to be processed by the attention mechanism.
+    #                  Shape: [num_tokens, hidden_dim]
+    #
+    # - split_id: Optional identifier (int): 0 or 1 — 0 for the first split batch, 1 for the second.
+    #             Relevant only in TokenWeave mode.
+    #
+    # - chunk_size: Optional identifier (int): Number of tokens in the first split batch.
+    #             Relevant only in TokenWeave mode.
+    #
+    # - num_actual_tokens: The number of tokens used to exclude padding or non-real tokens in TokenWeave mode.
+    #
+    # Returns:
+    # - Updated hidden_states tensor after attention and output projection.
+    # ----------------------------------------
     qkv, _ = self.qkv_proj(hidden_states)
     q, k, v = qkv.split([self.q_size, self.kv_size, self.kv_size], dim=-1)
-    self.rotary_emb(positions, q[:num_actual_tokens], k[:num_actual_tokens])
-    attn_output = self.attn(q, k, v, split_id, chunk_size)
-    # in-place, no-allreduce
+    if split_id is not None and chunk_size is not None:
+        # TokenWeave Mode
+        assert num_actual_tokens is not None
+        self.rotary_emb(positions, q[:num_actual_tokens], k[:num_actual_tokens])
+        attn_output = self.attn(q, k, v, split_id, chunk_size)
+    else:
+        # Default Mode
+        q, k = self.rotary_emb(positions, q, k)
+        attn_output = self.attn(q, k, v)
+    # inplace + no all reduce
     self.o_proj(attn_output, hidden_states,
                             is_tokenweave=True)
     return hidden_states
@@ -105,59 +124,65 @@ def forward(
     return hidden_states, residual
 
 # TokenWeave Implementation
-def forward_default(
+def forward_with_fuse_only(
     self,
     positions: torch.Tensor,
     hidden_states: torch.Tensor,
     residual: Optional[torch.Tensor],
     symm_mem_hdl: Any,
     layer_id: int,
-    rank: Optional[int] = 0,
-    world_size: Optional[int] = 1,
-    next_layer_norm: Optional[RMSNorm] = None,
-    actual_tokens: Optional[int] = None,
-    nearest_multiple_of_world_size: Optional[int] = None,
-    MAX_CTAS_ATTN: Optional[int] = 16,
-    MAX_CTAS_MLP: Optional[int] = 16,
+    rank: int = 0,
+    world_size: int = 1,
+    next_layer_norm: RMSNorm = None,
+    actual_tokens: int = None,
+    nearest_multiple_of_world_size: int = None,
+    MAX_CTAS_ATTN: int = 16,
+    MAX_CTAS_MLP: int = 16,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     """
-    An optimized, non-pipelined forward pass for low num_tokens.
-    Uses fused All-Reduce plus add-rmsnorm kernels.
+    Forward pass with fused all-reduce + RMSNorm + residual add only (no TokenWeave overlap).
+
+    Args:
+        positions (torch.Tensor): Positional encoding indices.
+        hidden_states (torch.Tensor): Input hidden states.
+        residual (Optional[torch.Tensor]): Optional Residual.
+        symm_mem_hdl (Any): Symmetric memory handle for all-reduce.
+        layer_id (int): Current layer index.
+        rank (int): Local process rank.
+        world_size (int): Total number of distributed processes.
+        next_layer_norm (RMSNorm): LayerNorm for the next block.
+        actual_tokens (int): Number of valid tokens.
+        nearest_multiple_of_world_size (int): Padding length (multiple of world_size).
+        MAX_CTAS_ATTN (int): Max CTAs for attention norm kernel.
+        MAX_CTAS_MLP (int): Max CTAs for MLP norm kernel.
+
+    Returns:
+        Tuple[torch.Tensor, torch.Tensor]: Updated hidden_states and residual.
     """
-    num_tokens_per_rank = nearest_multiple_of_world_size // world_size
-    # Self Attention
-    if residual is None:
-        residual = torch.empty_like(hidden_states)
-    if layer_id == 0: # First layer
-        self.input_layernorm(hidden_states, out=residual)
+    assert actual_tokens is not None, "actual_tokens must be provided"
+    assert nearest_multiple_of_world_size is not None, "nearest_multiple_of_world_size must be set"
+    assert next_layer_norm is not None, "next_layer_norm must be provided"
 
-    self.self_attn.forward_default(positions=positions,
-                                    hidden_states=hidden_states[:actual_tokens])
-    # Fused_AllReduce_plus_add_RMSNorm
-    self.post_attention_layernorm(
-        hidden_states[rank * num_tokens_per_rank: (rank + 1) * num_tokens_per_rank], 
-        residual[rank * num_tokens_per_rank: (rank + 1) * num_tokens_per_rank],
-        MAX_CTAS=min(MAX_CTAS_ATTN, num_tokens_per_rank),
-        fused_ar=True,
-        symm_mem_hdl=symm_mem_hdl,
-        rank=rank,
-        world_size=world_size,
-        offset=rank * num_tokens_per_rank * hidden_states.shape[1] * hidden_states.element_size(),
-    )
-    self.mlp.forward_default(hidden_states[:actual_tokens])
-    next_layer_norm(
-        hidden_states[rank * num_tokens_per_rank: (rank + 1) * num_tokens_per_rank], 
-        residual[rank * num_tokens_per_rank: (rank + 1) * num_tokens_per_rank],
-        MAX_CTAS=min(MAX_CTAS_MLP, num_tokens_per_rank),
-        fused_ar=True,
-        symm_mem_hdl=symm_mem_hdl,
-        rank=rank,
-        world_size=world_size,
-        offset=rank * num_tokens_per_rank * hidden_states.shape[1] * hidden_states.element_size(),
-    )
-    return hidden_states, residual
+    return tokenweave_with_fuse_only(
+            self,
+            *(
+                positions,
+                hidden_states,
+                residual,
+                symm_mem_hdl,
+                layer_id,
+                rank,
+                world_size,
+                next_layer_norm,
+                actual_tokens,
+                nearest_multiple_of_world_size,
+                MAX_CTAS_ATTN,
+                MAX_CTAS_MLP,
+                self.mlp.forward,
+            )
+        )
 
-def forward(
+def forward_tokenweave(
     self,
     positions: torch.Tensor,
     hidden_states: torch.Tensor,
@@ -165,138 +190,50 @@ def forward(
     symm_mem_hdl: Any,
     layer_id: int,
     end_layer: Optional[int] = None,
-    rank: Optional[int] = 0,
-    world_size: Optional[int] = 1,
-    current_stream: Optional[torch.cuda.Stream] = None,
-    copy_stream: Optional[torch.cuda.Stream] = None,
-    next_layer_norm: Optional[RMSNorm] = None,
-    chunk_size: Optional[int] = None,
-    actual_tokens: Optional[int] = None,
-    nearest_multiple_of_256: Optional[int] = None,
-    MAX_CTAS_ATTN: Optional[int] = 16,
-    MAX_CTAS_MLP: Optional[int] = 16,
+    rank: int = 0,
+    world_size: int = 1,
+    current_stream: torch.cuda.Stream = None,
+    copy_stream: torch.cuda.Stream = None,
+    next_layer_norm: RMSNorm = None,
+    chunk_size: int = None,
+    actual_tokens: int = None,
+    nearest_multiple_of_256: int = None,
+    MAX_CTAS_ATTN: int = 16,
+    MAX_CTAS_MLP: int = 16,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     """
-    The main TokenWeave forward pass, which pipelines computation and communication.
+    Performs forward pass of a transformer block using TokenWeave overlap strategy.
+    Processes two token chunks (interleaved) across GPUs with communication-compute overlap.
+
+    Returns:
+        Tuple[torch.Tensor, torch.Tensor]: Updated hidden_states and residual tensors.
     """
-    offset_second = chunk_size * hidden_states.shape[1] * hidden_states.element_size()
-    if residual is None:
-        residual = torch.empty_like(hidden_states)
+    assert chunk_size is not None and actual_tokens is not None, "chunk_size and actual_tokens are required"
+    assert current_stream is not None and copy_stream is not None, "CUDA streams must be provided"
+    assert next_layer_norm is not None, "next_layer_norm must be provided"
     
-    # Split tensors for pipelining
-    hidden_states_1, hidden_states_2 = hidden_states[:chunk_size], hidden_states[chunk_size:]
-    residual_1, residual_2 = residual[:chunk_size], residual[chunk_size:]
-    blpr_1, blpr_2 = chunk_size // world_size, hidden_states_2.shape[0] // world_size # bl_per_rank
-
-    # --- Attention Block Pipelining ---
-    if layer_id == 0: # First layer requires special handling
-        hidden_states_1 = self.input_layernorm(hidden_states_1, out=residual_1) 
-        multimem_reduce_scatter(
-            hidden_states_2,
+    return tokenweave_overlap(
+        self,
+        * (
+            positions,
+            hidden_states,
+            residual,
             symm_mem_hdl,
-            offset_second,
-            MAX_CTAS=8
-        )
-        self.input_layernorm(hidden_states_2[rank * blpr_2: (rank + 1) * blpr_2], out=residual_2[rank * blpr_2: (rank + 1) * blpr_2])
-        symm_mem_hdl.barrier(channel=7)
-        multimem_all_gather_async(
-            hidden_states_2,
-            symm_mem_hdl,
-            offset_second,
-            blpr_2 * hidden_states_2.shape[1] * hidden_states_2.element_size(), # nbytes_per_rank
+            layer_id,
+            end_layer,
+            rank,
+            world_size,
             current_stream,
+            copy_stream,
+            next_layer_norm,
+            chunk_size,
+            actual_tokens,
+            nearest_multiple_of_256,
+            MAX_CTAS_ATTN,
+            MAX_CTAS_MLP,
+            self.mlp.forward,
         )
-        symm_mem_hdl.barrier(channel=9)
-    else: # Subsequent layers overlap LayerNorm/All-Reduce with attention
-        with torch.cuda.stream(copy_stream):
-            copy_stream.wait_stream(current_stream)
-            self.input_layernorm(
-                hidden_states_2[rank * blpr_2: (rank + 1) * blpr_2], 
-                residual_2[rank * blpr_2: (rank + 1) * blpr_2],
-                MAX_CTAS=MAX_CTAS_ATTN,
-                fused_ar=True,
-                symm_mem_hdl=symm_mem_hdl,
-                rank=rank,
-                world_size=world_size,
-                offset=offset_second +  rank * blpr_2 * hidden_states_2.shape[1] * hidden_states_2.element_size(),
-            )
-    with torch.cuda.stream(current_stream):
-        hidden_states_1 = self.self_attn(
-            positions=positions[:chunk_size],
-            hidden_states=hidden_states_1,
-            split_id=0,
-            chunk_size=chunk_size,
-            num_actual_tokens=chunk_size,
-        )
-        current_stream.wait_stream(copy_stream)
-
-    with torch.cuda.stream(copy_stream):
-        copy_stream.wait_stream(current_stream)
-        self.post_attention_layernorm(
-            hidden_states_1[rank * blpr_1: (rank + 1) * blpr_1], 
-            residual_1[rank * blpr_1: (rank + 1) * blpr_1],
-            MAX_CTAS=MAX_CTAS_ATTN,
-            fused_ar=True,
-            symm_mem_hdl=symm_mem_hdl,
-            rank=rank,
-            world_size=world_size,
-            offset=rank * blpr_1 * hidden_states_1.shape[1] * hidden_states_1.element_size(),
-        )
-    with torch.cuda.stream(current_stream):
-        hidden_states_2 = self.self_attn(
-            positions=positions[chunk_size:],
-            hidden_states=hidden_states_2,
-            split_id=1,
-            chunk_size=chunk_size,
-            num_actual_tokens=actual_tokens - chunk_size,
-        )
-        current_stream.wait_stream(copy_stream)
-    
-    # --- MLP Block Pipelining ---
-    with torch.cuda.stream(copy_stream):
-        copy_stream.wait_stream(current_stream)
-        self.post_attention_layernorm(
-            hidden_states_2[rank * blpr_2: (rank + 1) * blpr_2], 
-            residual_2[rank * blpr_2: (rank + 1) * blpr_2],
-            MAX_CTAS=MAX_CTAS_MLP,
-            fused_ar=True,
-            symm_mem_hdl=symm_mem_hdl,
-            rank=rank,
-            world_size=world_size,
-            offset=offset_second +  rank * blpr_2 * hidden_states_2.shape[1] * hidden_states_2.element_size(),
-        )
-    
-    with torch.cuda.stream(current_stream):
-        hidden_states_1 = self.mlp(hidden_states_1)
-        current_stream.wait_stream(copy_stream)
-
-    with torch.cuda.stream(copy_stream):
-        copy_stream.wait_stream(current_stream)
-        next_layer_norm(
-            hidden_states_1[rank * blpr_1: (rank + 1) * blpr_1], 
-            residual_1[rank * blpr_1: (rank + 1) * blpr_1],
-            MAX_CTAS=MAX_CTAS_MLP,
-            fused_ar=True,
-            symm_mem_hdl=symm_mem_hdl,
-            rank=rank,
-            world_size=world_size,
-            offset=rank * blpr_1 * hidden_states_1.shape[1] * hidden_states_1.element_size(),
-        )
-    with torch.cuda.stream(current_stream):
-        hidden_states_2 = self.mlp(hidden_states_2)
-        current_stream.wait_stream(copy_stream)        
-    if layer_id == end_layer - 1:
-        next_layer_norm(
-            hidden_states_2[rank * blpr_2: (rank + 1) * blpr_2], 
-            residual_2[rank * blpr_2: (rank + 1) * blpr_2],
-            MAX_CTAS=16 if actual_tokens < 16384 else 32,
-            fused_ar=True,
-            symm_mem_hdl=symm_mem_hdl,
-            rank=rank,
-            world_size=world_size,
-            offset=offset_second +  rank * blpr_2 * hidden_states_2.shape[1] * hidden_states_2.element_size(),
-        )
-    return hidden_states, residual
+    )
 ```
 
 TokenWeave uses two different forward pass implementations based on `num_tokens`. If `num_tokens` is low (i.e., less than 1K), TokenWeave doesn't perform overlap but does use a fused all-reduce plus add-RMSNorm kernel. If `num_tokens` is high, it uses the fully overlapped version.
@@ -332,9 +269,19 @@ def get_input_embeddings(self, input_ids: torch.Tensor) -> torch.Tensor:
     return self.embed_tokens(input_ids)
 
 # TokenWeave Implementation
-def get_input_embeddings(self, input_ids: torch.Tensor, output_buffer: torch.Tensor, 
-                is_tokenweave: Optional[bool] = False, chunk_size: Optional[int] = None) -> torch.Tensor:
-    return self.embed_tokens(input_ids, output_parallel=output_buffer, use_pytorch_all_reduce=False, is_overlap=is_tokenweave, symm_mem_hdl=self.symm_mem_hdl, chunk_size=chunk_size)
+def get_input_embeddings(
+    self, 
+    input_ids: torch.Tensor, 
+    output_buffer: torch.Tensor, 
+    is_tokenweave: Optional[bool] = False, 
+    chunk_size: Optional[int] = None) -> torch.Tensor:
+    return self.embed_tokens(
+        input_ids, 
+        output_parallel=output_buffer, 
+        use_pytorch_all_reduce=False, 
+        is_overlap=is_tokenweave, 
+        symm_mem_hdl=self.symm_mem_hdl, 
+        chunk_size=chunk_size)
 ```
 Modified the code to support split embedding computation.
 
@@ -404,25 +351,25 @@ def forward(
         hidden_states = intermediate_tensors["hidden_states"]
         residual = intermediate_tensors["residual"]
 
-    if not is_tokenweave: # default
+    if not is_tokenweave: # with fuse only
         nearest_multiple_of_world_size = (num_tokens + world_size - 1) // world_size * world_size
         hidden_states = self.staging_buffer[:nearest_multiple_of_world_size]
         for layer_id in range(self.start_layer, self.end_layer):
             layer = self.layers[layer_id]
             next_layer_norm = self.layers[layer_id + 1].input_layernorm if layer_id < self.end_layer - 1 else self.norm
-            hidden_states, residual = layer.forward_default(
+            hidden_states, residual = layer.forward_with_fuse_only(
                 positions, 
                 hidden_states, 
                 residual, 
                 self.symm_mem_hdl, 
                 layer_id,
-                # end_layer is not used in default flow
+                # end_layer is not used in with fuse only flow
                 rank,
                 world_size,
-                # current_stream is not used in default flow
-                # copy_stream is not used in default flow
+                # current_stream is not used in with fuse only flow
+                # copy_stream is not used in with fuse only flow
                 next_layer_norm,
-                # tokenweave_chunk_size is not used in default flow
+                # tokenweave_chunk_size is not used in with fuse only flow
                 num_tokens,
                 nearest_multiple_of_world_size,
                 self.MAX_CTAS_ATTN,
@@ -442,7 +389,7 @@ def forward(
     for layer_id in range(self.start_layer, self.end_layer):
         layer = self.layers[layer_id]
         next_layer_norm = self.layers[layer_id + 1].input_layernorm if layer_id < self.end_layer - 1 else self.norm
-        hidden_states, residual = layer(positions, 
+        hidden_states, residual = layer.forward_tokenweave(positions, 
                                         hidden_states, 
                                         residual, 
                                         self.symm_mem_hdl, 

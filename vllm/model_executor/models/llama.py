@@ -61,7 +61,7 @@ from .utils import (AutoWeightsLoader, PPMissingLayer, extract_layer_index,
                     make_empty_intermediate_tensors_factory, make_layers,
                     maybe_prefix)
 
-from .tokenweave_utils import (load_config, fused_allreduce_layernorm, tokenweave_with_fuse_only, tokenweave_overlap)
+from .tokenweave_utils import (load_config, tokenweave_with_fuse_only, tokenweave_overlap)
 
 class LlamaMLP(nn.Module):
 

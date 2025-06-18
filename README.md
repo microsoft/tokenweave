@@ -9,7 +9,7 @@ Efficient Compute-Communication Overlap for Distributed LLM Inference
 </h3>
 
 <p align="center">
-| <a href="https://arxiv.org/abs/2505.11329"><b>Paper</b></a> | <a href="https://arxiv.org/abs/2505.11329"><b>Slides</b></a> |
+| <a href="https://arxiv.org/abs/2505.11329"><b>Paper</b></a> |
 </p>
 
 ## Overview
@@ -18,19 +18,19 @@ Efficient Compute-Communication Overlap for Distributed LLM Inference
 
 TokenWeave addresses this by introducing a **coarse-grained compute-communication overlap** mechanism that significantly improves efficiency during inference. TokenWeave is currently integrated with `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` but it can be easily extended to other similar models by modifying the model file. Please see <a href="docs/AddTokenWeave.md">how we modify `llama.py` to integrate TokenWeave</a> for the steps required to integrate TokenWeave into an existing model file.
 
+## TokenWeave NVIDIA Nsight Systems (nsys) profile
+
+<p align="center">
+  <picture>
+    <img alt="TokenWeave-nsys-profile" src="assets/profiles/tokenweave-llama-profile.png" width="98%" height="98%">
+  </picture>
+</p>
+
 ## Prerequisites
 
 - **Compilation**: CUDA 12.4  
 - **Runtime environment**: Python 3.12, PyTorch 2.6.0, Ubuntu 22.04  
 - **Hardware**: 8×H100 DGX system with NVLink interconnects
-
-## TokenWeave NVIDIA Nsight Systems (nsys) profile
-
-<p align="center">
-  <picture>
-    <img alt="TokenWeave-nsys-profile" src="assets/logos/tokenweave-llama-profile.png" width="98%" height="98%">
-  </picture>
-</p>
 
 ## Installation
 
@@ -49,6 +49,10 @@ conda activate tokenweave
 make install # 18 minutes
 # or pip3 install -v -e .
 make install_dependencies # 17 seconds
+```
+
+## Quick Start
+```bash
 huggingface-cli login --token HF_TOKEN
 # run offline inference example
 make run_qwen2
@@ -58,6 +62,25 @@ make run_llama3
 # please kill the process and start it again — that should resolve the issue.
 # Note: vLLM version 0.8.5.post1 may also hang during model downloading, depending 
 # on the environment setup.
+```
+**To Generate Tokenweave Configs (Optional)**
+If you want to generate TokenWeave configs for a new model, you can use the configs_generator script and modify it as needed. We have already provided configs for `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` on 8xH100.
+```bash
+cd artifact
+tmux new -s tokenweave_session  # Start a new tmux session
+conda activate tokenweave       # Activate the conda environment
+# Run the following command in the tmux session to generate configs for
+# `LLaMA-3.3-70B`, `Qwen2.5-72B`, and `Mixtral-8x22B`
+make configs_generator          # Takes approximately 1 day
+```
+
+**To profile using nsys**
+```bash
+# install nsys
+wget https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2024_4/NsightSystems-linux-cli-public-2024.4.1.61-3431596.deb
+dpkg -i NsightSystems-linux-cli-public-2024.4.1.61-3431596.deb
+# run
+nsys profile -o report.nsys-rep --trace-fork-before-exec=true --cuda-graph-trace=node <script_name> <arguments>
 ```
 
 ## Benchmarks
@@ -91,20 +114,6 @@ make figure_13 # 1 hr 52 minutes
 The artifact scripts redirect the raw output numbers and logs to the `output/` folder, while the plotted graphs are stored
 in the `graphs/` folder. CSV files for the figures can be found in the `csvs/` directory. Results may show minor runtime 
 variations compared to those reported in the paper, but the general trends should remain consistent.
-
-**To Generate Tokenweave Configs**
-```bash
-make configs_generator # ~1 day
-```
-
-**To profile using nsys**
-```bash
-# install nsys
-wget https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2024_4/NsightSystems-linux-cli-public-2024.4.1.61-3431596.deb
-dpkg -i NsightSystems-linux-cli-public-2024.4.1.61-3431596.deb
-# run
-nsys profile -o report.nsys-rep --trace-fork-before-exec=true --cuda-graph-trace=node <script_name> <arguments>
-```
 
 ## Citation
 

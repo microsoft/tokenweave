@@ -55,7 +55,7 @@ from .utils import (AutoWeightsLoader, is_pp_missing_parameter,
                     make_empty_intermediate_tensors_factory, make_layers,
                     maybe_prefix)
 
-from .tokenweave_utils import (load_config, fused_allreduce_layernorm, tokenweave_with_fuse_only, tokenweave_overlap)
+from .tokenweave_utils import (load_config, tokenweave_with_fuse_only, tokenweave_overlap)
 
 class MixtralMoE(nn.Module):
     """A tensor-parallel MoE implementation for Mixtral that shards each expert

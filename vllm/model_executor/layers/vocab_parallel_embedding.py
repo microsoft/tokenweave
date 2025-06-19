@@ -410,7 +410,7 @@ class VocabParallelEmbedding(torch.nn.Module):
                 use_pytorch_all_reduce: Optional[bool] = False,
                 is_overlap: Optional[bool] = False,
                 symm_mem_hdl: Optional[Any] = None,
-                chunk_size: Optional[int] = None,
+                split_size: Optional[int] = None,
             ):
         """
         Forward pass for embedding with optional tensor parallelism and communication optimizations.
@@ -421,7 +421,7 @@ class VocabParallelEmbedding(torch.nn.Module):
             use_pytorch_all_reduce (Optional[bool]): If True, uses PyTorch's distributed all-reduce. Only needed for microbenchmarks.
             is_overlap (Optional[bool]): If True, assumes overlapping communication and skips all-reduce on second chunk.
             symm_mem_hdl (Optional[Any]): Symmetric memory handle used by multimem all-reduce.
-            chunk_size (Optional[int]): splits the tensor into two chunks.
+            split_size (Optional[int]): splits the tensor into two chunks.
         
         Returns:
             torch.Tensor: hidden_states tensor (reduced across tensor parallel devices if applicable).
@@ -441,6 +441,7 @@ class VocabParallelEmbedding(torch.nn.Module):
 
         # If an output tensor is preallocated, copy the result into it; otherwise, use embedding_output
         if output_parallel is not None:
+            # This is only needed due to symmetric memory; it can be removed otherwise.
             output_parallel.copy_(embedding_output)
         else:
             output_parallel = embedding_output
@@ -463,22 +464,22 @@ class VocabParallelEmbedding(torch.nn.Module):
                 # Use multimem--based all-reduce for optimized communication
                 multimem_all_reduce(tensor, symm_mem_hdl, offset, MAX_CTAS=8)
 
-        # If chunking is enabled, perform all-reduce in two steps
-        if chunk_size is not None:
-            # First chunk
-            allreduce(output_parallel[:chunk_size])
+        # If splitting is enabled, perform all-reduce in two steps
+        if split_size is not None:
+            # do the synchronous all-reduce of the split-0
+            allreduce(output_parallel[:split_size])
             # In TokenWeave we overlap the second part of the all-reduce of layer 0
             if not is_overlap:
-                # Calculate memory offset for the second chunk
+                # Calculate memory offset for the split-1
                 offset = (
                     output_parallel.shape[-1]
                     * output_parallel.element_size()
-                    * chunk_size
+                    * split_size
                 )
-                # Second chunk
-                allreduce(output_parallel[chunk_size:], offset)
+                # do the synchronous all-reduce of the split-1 if not overlapping
+                allreduce(output_parallel[split_size:], offset)
         else:
-            # No chunking: reduce the full tensor
+            # No splitting: reduce the full tensor
             allreduce(output_parallel)
 
         return output_parallel

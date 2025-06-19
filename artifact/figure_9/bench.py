@@ -104,20 +104,20 @@ def benchmark(
 
     results = {}
     results["baseline_us"] = bmark(lambda: mlp_block_func(hidden_states))
-    chunk_offsets = [0, 64, 128, 192, 256]
+    split_offsets = [0, 64, 128, 192, 256]
     elapsed_times = []
-    for chunk_offset in chunk_offsets:
-        chunk_size = bl // 2 + chunk_offset
-        chunk_size = min(chunk_size, bl)
+    for split_offset in split_offsets:
+        split_size = bl // 2 + split_offset
+        split_size = min(split_size, bl)
         torch.cuda.synchronize()
         dist.barrier(device_ids=[device.index])
         time.sleep(2)
-        split1_time = bmark(lambda: mlp_block_func(hidden_states[:chunk_size]))
-        split2_time = bmark(lambda: mlp_block_func(hidden_states[chunk_size:]))
+        split1_time = bmark(lambda: mlp_block_func(hidden_states[:split_size]))
+        split2_time = bmark(lambda: mlp_block_func(hidden_states[split_size:]))
         torch.cuda.synchronize()
         dist.barrier(device_ids=[device.index])
         elapsed_times.append(split1_time + split2_time)
-        results[f"offset_{chunk_offset}"] = split1_time + split2_time
+        results[f"offset_{split_offset}"] = split1_time + split2_time
     results["smart_us"] = min(elapsed_times)
     # Logging
     if rank == 0:

@@ -20,7 +20,7 @@ NUM_GPUS_LIST=(8)
 MODEL_NAME_LIST=("Llama-3.3-70B-Instruct" "Qwen2.5-72B-Instruct" "Mixtral-8x22B-Instruct-v0.1")
 BASELINE_IMPL_LIST=("baseline_multimem")
 OVERLAP_FUSED_IMPL_LIST=("overlap_fused")
-CHUNKED_PREFILL_SIZES_LIST=(1024 2048)
+CHUNKED_PREFILL_SIZES_LIST=(2048 4096)
 extra_args=""
 
 # ------------------ Environment Setup ------------------

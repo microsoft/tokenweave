@@ -574,7 +574,7 @@ class FlashAttentionImpl(AttentionImpl):
         attn_metadata: FlashAttentionMetadata,
         output: Optional[torch.Tensor] = None,
         split_id: Optional[int] = None,
-        chunk_size: Optional[int] = None,
+        split_size: Optional[int] = None,
     ) -> torch.Tensor:
         """Forward pass with FlashAttention.
 
@@ -586,7 +586,7 @@ class FlashAttentionImpl(AttentionImpl):
             attn_metadata: Metadata for attention.
             output (Tensor): Shape = [num_tokens, num_heads * head_size]
             split_id (int): 0 or 1 — 0 for the first split batch, 1 for the second.
-            chunk_size (int): Number of tokens in the first split batch.
+            split_size (int): Number of tokens in the first split batch.
         Returns:
             shape = [num_tokens, num_heads * head_size]
         NOTE: FP8 quantization, flash-attn expect the size of
@@ -616,16 +616,16 @@ class FlashAttentionImpl(AttentionImpl):
         # the slot_mapping's shape to determine the number of actual tokens.
         key_cache, value_cache = kv_cache.unbind(0)
 
-        # Determine the slot mapping to use based on split_id and chunk_size.
-        # If chunk_size is provided:
-        #   - Use the first `chunk_size` entries for split_id == 0 (first split batch)
+        # Determine the slot mapping to use based on split_id and split_size.
+        # If split_size is provided:
+        #   - Use the first `split_size` entries for split_id == 0 (first split batch)
         #   - Use the remaining entries for split_id == 1 (second split batch)
         #   - Otherwise, default to the full slot mapping
         slot_mapping = (
-            attn_metadata.slot_mapping[:chunk_size] if split_id == 0 else
-            attn_metadata.slot_mapping[chunk_size:] if split_id == 1 else
+            attn_metadata.slot_mapping[:split_size] if split_id == 0 else
+            attn_metadata.slot_mapping[split_size:] if split_id == 1 else
             attn_metadata.slot_mapping
-        ) if chunk_size is not None else attn_metadata.slot_mapping
+        ) if split_size is not None else attn_metadata.slot_mapping
 
         # Call the custom Torch operator to reshape and cache the key and value tensors
         torch.ops._C_cache_ops.reshape_and_cache_flash(
@@ -654,6 +654,9 @@ class FlashAttentionImpl(AttentionImpl):
             (self.use_irope and attn_metadata.local_attn_metadata is not None)
 
         is_tokenweave = split_id in {0, 1} and attn_metadata.tokenweave_attn_metadata is not None
+
+        assert not (is_tokenweave and (use_local_attn or attn_metadata.use_cascade)), \
+            "TokenWeave currently does not support local attention or cascade attention."
 
         if not attn_metadata.use_cascade or use_local_attn:
             tokenweave_attn_metadata = attn_metadata.tokenweave_attn_metadata

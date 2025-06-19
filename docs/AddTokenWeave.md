@@ -55,7 +55,7 @@ def forward(
     positions: torch.Tensor,
     hidden_states: torch.Tensor,
     split_id: Optional[int] = None,
-    chunk_size: Optional[int] = None,
+    split_size: Optional[int] = None,
     num_actual_tokens: Optional[int] = None,
 ) -> torch.Tensor:
     """
@@ -72,7 +72,7 @@ def forward(
     # - split_id: Optional identifier (int): 0 or 1 — 0 for the first split batch, 1 for the second.
     #             Relevant only in TokenWeave mode.
     #
-    # - chunk_size: Optional identifier (int): Number of tokens in the first split batch.
+    # - split_size: Optional identifier (int): Number of tokens in the first split batch.
     #             Relevant only in TokenWeave mode.
     #
     # - num_actual_tokens: The number of tokens used to exclude padding or non-real tokens in TokenWeave mode.
@@ -82,11 +82,11 @@ def forward(
     # ----------------------------------------
     qkv, _ = self.qkv_proj(hidden_states)
     q, k, v = qkv.split([self.q_size, self.kv_size, self.kv_size], dim=-1)
-    if split_id is not None and chunk_size is not None:
+    if split_id is not None and split_size is not None:
         # TokenWeave Mode
         assert num_actual_tokens is not None
         self.rotary_emb(positions, q[:num_actual_tokens], k[:num_actual_tokens])
-        attn_output = self.attn(q, k, v, split_id, chunk_size)
+        attn_output = self.attn(q, k, v, split_id, split_size)
     else:
         # Default Mode
         q, k = self.rotary_emb(positions, q, k)
@@ -96,7 +96,7 @@ def forward(
                             is_tokenweave=True)
     return hidden_states
 ```
-The attention forward pass is adapted to handle chunks of tokens, performs the final projection in-place on the `hidden_states` buffer, and does not call `all-reduce` here.
+The attention forward pass is adapted to handle splits of tokens, performs the final projection in-place on the `hidden_states` buffer, and does not call `all-reduce` here.
 
 ### class LlamaDecoderLayer(nn.Module):
 ```py
@@ -135,7 +135,7 @@ def forward_with_fuse_only(
     world_size: int = 1,
     next_layer_norm: RMSNorm = None,
     actual_tokens: int = None,
-    nearest_multiple_of_world_size: int = None,
+    num_tokens_padded: int = None,
     MAX_CTAS_ATTN: int = 16,
     MAX_CTAS_MLP: int = 16,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
@@ -152,7 +152,7 @@ def forward_with_fuse_only(
         world_size (int): Total number of distributed processes.
         next_layer_norm (RMSNorm): LayerNorm for the next block.
         actual_tokens (int): Number of valid tokens.
-        nearest_multiple_of_world_size (int): Padding length (multiple of world_size).
+        num_tokens_padded (int): Padding length (multiple of world_size).
         MAX_CTAS_ATTN (int): Max CTAs for attention norm kernel.
         MAX_CTAS_MLP (int): Max CTAs for MLP norm kernel.
 
@@ -160,7 +160,7 @@ def forward_with_fuse_only(
         Tuple[torch.Tensor, torch.Tensor]: Updated hidden_states and residual.
     """
     assert actual_tokens is not None, "actual_tokens must be provided"
-    assert nearest_multiple_of_world_size is not None, "nearest_multiple_of_world_size must be set"
+    assert num_tokens_padded is not None, "num_tokens_padded must be set"
     assert next_layer_norm is not None, "next_layer_norm must be provided"
 
     return tokenweave_with_fuse_only(
@@ -175,7 +175,7 @@ def forward_with_fuse_only(
                 world_size,
                 next_layer_norm,
                 actual_tokens,
-                nearest_multiple_of_world_size,
+                num_tokens_padded,
                 MAX_CTAS_ATTN,
                 MAX_CTAS_MLP,
                 self.mlp.forward,
@@ -195,20 +195,20 @@ def forward_tokenweave(
     current_stream: torch.cuda.Stream = None,
     copy_stream: torch.cuda.Stream = None,
     next_layer_norm: RMSNorm = None,
-    chunk_size: int = None,
+    split_size: int = None,
     actual_tokens: int = None,
-    nearest_multiple_of_256: int = None,
+    num_tokens_padded: int = None,
     MAX_CTAS_ATTN: int = 16,
     MAX_CTAS_MLP: int = 16,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     """
     Performs forward pass of a transformer block using TokenWeave overlap strategy.
-    Processes two token chunks (interleaved) across GPUs with communication-compute overlap.
+    Processes two token splits (interleaved) across GPUs with communication-compute overlap.
 
     Returns:
         Tuple[torch.Tensor, torch.Tensor]: Updated hidden_states and residual tensors.
     """
-    assert chunk_size is not None and actual_tokens is not None, "chunk_size and actual_tokens are required"
+    assert split_size is not None and actual_tokens is not None, "split_size and actual_tokens are required"
     assert current_stream is not None and copy_stream is not None, "CUDA streams must be provided"
     assert next_layer_norm is not None, "next_layer_norm must be provided"
     
@@ -226,9 +226,9 @@ def forward_tokenweave(
             current_stream,
             copy_stream,
             next_layer_norm,
-            chunk_size,
+            split_size,
             actual_tokens,
-            nearest_multiple_of_256,
+            num_tokens_padded,
             MAX_CTAS_ATTN,
             MAX_CTAS_MLP,
             self.mlp.forward,
@@ -257,7 +257,7 @@ world_size = get_tensor_model_parallel_world_size()
 self.config_data = load_config(f"tokenweave_configs/llama_config_{world_size}.json")
 self.MAX_CTAS_ATTN = 16
 self.MAX_CTAS_MLP = 16
-self.CHUNK_OFFSET = 0
+self.SPLIT_OFFSET = 0
 ```
 TokenWeave uses symmetric memory and requires the storage of some metadata.
 
@@ -274,14 +274,14 @@ def get_input_embeddings(
     input_ids: torch.Tensor, 
     output_buffer: torch.Tensor, 
     is_tokenweave: Optional[bool] = False, 
-    chunk_size: Optional[int] = None) -> torch.Tensor:
+    split_size: Optional[int] = None) -> torch.Tensor:
     return self.embed_tokens(
         input_ids, 
         output_parallel=output_buffer, 
         use_pytorch_all_reduce=False, 
         is_overlap=is_tokenweave, 
         symm_mem_hdl=self.symm_mem_hdl, 
-        chunk_size=chunk_size)
+        split_size=split_size)
 ```
 Modified the code to support split embedding computation.
 
@@ -328,23 +328,25 @@ def forward(
 ) -> Union[torch.Tensor, IntermediateTensors]:
     rank, world_size = get_tensor_model_parallel_rank(), get_tensor_model_parallel_world_size()
     num_tokens = input_ids.shape[0] if input_ids is not None else inputs_embeds.shape[0]
-    is_tokenweave = num_tokens >= 1024 # spliting requires at least 1024 tokens
-    tokenweave_chunk_size = None
+    # TokenWeave is enabled when num_tokens >= 1024
+    # This can be adjusted based on the model, world size and other factors.
+    is_tokenweave = num_tokens >= 1024 
+    tokenweave_split_size = None
     if is_tokenweave:
         # Load the tokenweave config based on the number of tokens
         closest_len = min(self.config_data.keys(), key=lambda k: abs(k - num_tokens))
         tokenweave_config = self.config_data[closest_len]
         self.MAX_CTAS_ATTN = tokenweave_config["attention_ctas"]
         self.MAX_CTAS_MLP = tokenweave_config["mlp_ctas"]
-        self.CHUNK_OFFSET = tokenweave_config["chunk_offset"]
-        tokenweave_chunk_size = (((num_tokens + 255) & ~255) // 2 + self.CHUNK_OFFSET) if is_tokenweave else None
+        self.SPLIT_OFFSET = tokenweave_config["split_offset"]
+        tokenweave_split_size = (((num_tokens + 255) & ~255) // 2 + self.SPLIT_OFFSET) if is_tokenweave else None
     if get_pp_group().is_first_rank:
         if inputs_embeds is not None:
             self.buff = self.staging_buffer[:inputs_embeds.shape[0]]
             hidden_states = inputs_embeds
         else:
             self.buff = self.staging_buffer[:input_ids.shape[0]]
-            hidden_states = self.get_input_embeddings(input_ids, self.buff, is_tokenweave, tokenweave_chunk_size)
+            hidden_states = self.get_input_embeddings(input_ids, self.buff, is_tokenweave, tokenweave_split_size)
         residual = None
     else:
         assert intermediate_tensors is not None
@@ -352,8 +354,8 @@ def forward(
         residual = intermediate_tensors["residual"]
 
     if not is_tokenweave: # with fuse only
-        nearest_multiple_of_world_size = (num_tokens + world_size - 1) // world_size * world_size
-        hidden_states = self.staging_buffer[:nearest_multiple_of_world_size]
+        num_tokens_padded = (num_tokens + world_size - 1) // world_size * world_size
+        hidden_states = self.staging_buffer[:num_tokens_padded]
         for layer_id in range(self.start_layer, self.end_layer):
             layer = self.layers[layer_id]
             next_layer_norm = self.layers[layer_id + 1].input_layernorm if layer_id < self.end_layer - 1 else self.norm
@@ -369,9 +371,9 @@ def forward(
                 # current_stream is not used in with fuse only flow
                 # copy_stream is not used in with fuse only flow
                 next_layer_norm,
-                # tokenweave_chunk_size is not used in with fuse only flow
+                # tokenweave_split_size is not used in with fuse only flow
                 num_tokens,
-                nearest_multiple_of_world_size,
+                num_tokens_padded,
                 self.MAX_CTAS_ATTN,
                 self.MAX_CTAS_MLP,
             )
@@ -383,8 +385,8 @@ def forward(
             })
         return hidden_states[:num_tokens]
     # TokenWeave
-    nearest_multiple_of_256 = (num_tokens + 255) & ~255
-    hidden_states = self.staging_buffer[:nearest_multiple_of_256]
+    num_tokens_padded = (num_tokens + 255) & ~255
+    hidden_states = self.staging_buffer[:num_tokens_padded]
 
     for layer_id in range(self.start_layer, self.end_layer):
         layer = self.layers[layer_id]
@@ -400,9 +402,9 @@ def forward(
                                         self.current_stream,
                                         self.copy_stream,
                                         next_layer_norm,
-                                        tokenweave_chunk_size,
+                                        tokenweave_split_size,
                                         num_tokens,
-                                        nearest_multiple_of_256,
+                                        num_tokens_padded,
                                         self.MAX_CTAS_ATTN,
                                         self.MAX_CTAS_MLP,
                                         )

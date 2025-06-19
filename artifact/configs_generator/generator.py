@@ -26,7 +26,7 @@ def filter_and_aggregate(data, model_name, gpu_count):
         overlap = subset[subset['impl'] == 'overlap_fused']
         min_overlap = overlap['avg_latency(ms)'].min()
         row['overlap_fused'] = min_overlap
-        row['overlap_fused_chunk_offset'] = overlap.loc[overlap['avg_latency(ms)'].idxmin(), 'chunk_offset']
+        row['overlap_fused_split_offset'] = overlap.loc[overlap['avg_latency(ms)'].idxmin(), 'split_offset']
         row['overlap_fused_attn_ctas'] = overlap.loc[overlap['avg_latency(ms)'].idxmin(), 'attn_ctas']
         row['overlap_fused_mlp_ctas'] = overlap.loc[overlap['avg_latency(ms)'].idxmin(), 'mlp_ctas']
         result = pd.concat([result, pd.DataFrame([row])], ignore_index=True)
@@ -71,7 +71,7 @@ def create_json_config(data, model_name, gpu_count, outdir):
                 "baseline_ctas": int(max(min_row_baseline_fused['attn_ctas'], min_row_baseline_fused['mlp_ctas'])) if pd.notna(min_row_baseline_fused['attn_ctas']) and pd.notna(min_row_baseline_fused['mlp_ctas']) else 32,
                 "attention_ctas": int(min_row_overlap_fused['attn_ctas']) if pd.notna(min_row_overlap_fused['attn_ctas']) else 8,
                 "mlp_ctas": int(min_row_overlap_fused['mlp_ctas']) if pd.notna(min_row_overlap_fused['mlp_ctas']) else 8,
-                "chunk_offset": int(min_row_overlap_fused['chunk_offset']) if pd.notna(min_row_overlap_fused['chunk_offset']) else 0
+                "split_offset": int(min_row_overlap_fused['split_offset']) if pd.notna(min_row_overlap_fused['split_offset']) else 0
             }
         else:
             # Fallback to default values if no data found
@@ -79,7 +79,7 @@ def create_json_config(data, model_name, gpu_count, outdir):
                 "baseline_ctas": 32,
                 "attention_ctas": 8,
                 "mlp_ctas": 8,
-                "chunk_offset": 0
+                "split_offset": 0
             }
     
     # Create JSON filename

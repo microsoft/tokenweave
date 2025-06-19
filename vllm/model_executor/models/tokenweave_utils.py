@@ -185,16 +185,16 @@ def tokenweave_overlap(
     current_stream: torch.cuda.Stream = None,
     copy_stream: torch.cuda.Stream = None,
     next_layer_norm: RMSNorm = None,
-    chunk_size: int = None,
+    split_size: int = None,
     actual_tokens: int = None,
-    nearest_multiple_of_256: int = None,
+    num_tokens_padded: int = None,
     MAX_CTAS_ATTN: int = 16,
     MAX_CTAS_MLP: int = 16,
     mlp_fn: Callable = None,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     """
     Performs forward pass of a transformer block using TokenWeave overlap strategy.
-    Processes two token chunks (interleaved) across GPUs with communication-compute overlap.
+    Processes two token splits (interleaved) across GPUs with communication-compute overlap.
 
     Returns:
         Tuple[torch.Tensor, torch.Tensor]: Updated hidden_states and residual tensors.
@@ -202,13 +202,13 @@ def tokenweave_overlap(
     assert mlp_fn is not None, "mlp_fn must be provided"
     num_bytes_per_token = hidden_states.shape[1] * hidden_states.element_size()
     # Self Attention
-    offset_second = chunk_size * hidden_states.shape[1] * hidden_states.element_size()
+    offset_second = split_size * hidden_states.shape[1] * hidden_states.element_size()
     if residual is None:
         residual = torch.empty_like(hidden_states)
     # Split hidden states and residuals
-    hidden_states_1, hidden_states_2 = hidden_states[:chunk_size], hidden_states[chunk_size:]
-    residual_1, residual_2 = residual[:chunk_size], residual[chunk_size:]
-    blpr_1 = chunk_size // world_size
+    hidden_states_1, hidden_states_2 = hidden_states[:split_size], hidden_states[split_size:]
+    residual_1, residual_2 = residual[:split_size], residual[split_size:]
+    blpr_1 = split_size // world_size
     blpr_2 = hidden_states_2.shape[0] // world_size
 
     # === LayerNorm & Comm for First Layer ===
@@ -250,11 +250,11 @@ def tokenweave_overlap(
     # === Self-Attn on split-0 ===
     with torch.cuda.stream(current_stream):
         hidden_states_1 = self.self_attn(
-            positions=positions[:chunk_size],
+            positions=positions[:split_size],
             hidden_states=hidden_states_1,
             split_id=0,
-            chunk_size=chunk_size,
-            num_actual_tokens=chunk_size,
+            split_size=split_size,
+            num_actual_tokens=split_size,
         )
         current_stream.wait_stream(copy_stream)
 
@@ -276,11 +276,11 @@ def tokenweave_overlap(
     # === Self-Attn on split-1 ===
     with torch.cuda.stream(current_stream):
         hidden_states_2 = self.self_attn(
-            positions=positions[chunk_size:],
+            positions=positions[split_size:],
             hidden_states=hidden_states_2,
             split_id=1,
-            chunk_size=chunk_size,
-            num_actual_tokens=actual_tokens - chunk_size,
+            split_size=split_size,
+            num_actual_tokens=actual_tokens - split_size,
         )
         current_stream.wait_stream(copy_stream)
     

@@ -172,7 +172,7 @@ class Attention(nn.Module):
         key: torch.Tensor,
         value: torch.Tensor,
         split_id: Optional[int] = None,
-        chunk_size: Optional[int] = None,
+        split_size: Optional[int] = None,
         # For some alternate attention backends like MLA the attention output
         # shape does not match the query shape, so we optionally let the model
         # definition specify the output tensor shape.
@@ -180,7 +180,7 @@ class Attention(nn.Module):
     ) -> torch.Tensor:
         """
         split_id (int): 0 or 1 — 0 for the first split batch, 1 for the second.
-        chunk_size (int): Number of tokens in the first split batch.
+        split_size (int): Number of tokens in the first split batch.
         The KV cache is stored inside this class and is accessed via
         `self.kv_cache`.
 
@@ -226,7 +226,7 @@ class Attention(nn.Module):
                                   output=output)
             else:
                 torch.ops.vllm.unified_attention_with_output(
-                    query, key, value, output, self.layer_name, split_id, chunk_size)
+                    query, key, value, output, self.layer_name, split_id, split_size)
             return output.view(-1, hidden_size)
         else:
             if self.use_direct_call:
@@ -414,12 +414,12 @@ def unified_attention_with_output(
     output: torch.Tensor,
     layer_name: str,
     split_id: Optional[int] = None, 
-    chunk_size: Optional[int] = None,
+    split_size: Optional[int] = None,
 ) -> None:
     """
         TokenWeave arguments
         split_id (int): 0 or 1 — 0 for the first split batch, 1 for the second.
-        chunk_size (int): Number of tokens in the first split batch.
+        split_size (int): Number of tokens in the first split batch.
     """
     wait_for_kv_layer_from_connector(layer_name)
     forward_context: ForwardContext = get_forward_context()
@@ -434,7 +434,7 @@ def unified_attention_with_output(
                       attn_metadata,
                       output=output,
                       split_id=split_id,
-                      chunk_size=chunk_size)
+                      split_size=split_size)
 
     maybe_save_kv_layer_to_connector(layer_name, kv_cache)
 
@@ -446,12 +446,12 @@ def unified_attention_with_output_fake(
     output: torch.Tensor,
     layer_name: str,
     split_id: Optional[int] = None,
-    chunk_size: Optional[int] = None
+    split_size: Optional[int] = None
 ) -> None:
     """
         TokenWeave arguments
         split_id (int): 0 or 1 — 0 for the first split batch, 1 for the second.
-        chunk_size (int): Number of tokens in the first split batch.
+        split_size (int): Number of tokens in the first split batch.
     """
     return
 

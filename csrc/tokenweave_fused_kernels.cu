@@ -25,7 +25,7 @@
 #endif
 
 #include "tokenweave_multimem_utils.cuh"
-
+#include <cassert>
 
 namespace vllm
 {
@@ -128,7 +128,6 @@ fused_rs_ln_ag_cta_kernel(
     {
       auto mtemp = multimem_ld_reduce_add<16>(mcptr + offset_scalar + idx * width);
       vec_t temp = *(reinterpret_cast<vec_t *>(&mtemp));
-      // vec_t temp = input_o[idx];
       temp += residual_o[idx];
       variance[0] += temp.sum_squares(); // FP32 accumulation
       residual_o[idx] = temp;
@@ -148,7 +147,6 @@ fused_rs_ln_ag_cta_kernel(
       vec_t temp = residual_o[idx];
       temp *= s_variance;
       temp *= shared_weight;
-      // input_o[idx] = temp;
       multimem_st<16>(mcptr + offset_scalar + idx * width, *(reinterpret_cast<Vec<16> *>(&temp)));
     }
   }
@@ -159,7 +157,7 @@ fused_rs_ln_ag_cta_kernel(
 /* 
 * ********************************************************* *
 * FUSED RS + RESIDUAL ADD + RMS NORM + AG CTA-BASED KERNEL  *
-* GENERIC NOT SUPPORT                                       *
+* GENERIC NOT SUPPORTED                                     *
 * ********************************************************* *
 */
 template <typename scalar_t, int width>
@@ -177,6 +175,7 @@ fused_rs_ln_ag_cta_kernel(
     const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 } // namespace vllm
 

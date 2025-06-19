@@ -25,14 +25,14 @@
 #endif
 
 #include "tokenweave_multimem_utils.cuh"
-
+#include <cassert>
 
 namespace vllm
 {
 /* 
 * ********************************************************* *
 * FUSED RESIDUAL ADD + RMS NORM CTA-BASED KERNEL            *
-* Function specialization in the case of      BF16 tensors. *
+* Function specialization in the case of BF16 tensors.      *
 * ********************************************************* *
 */
 template <typename scalar_t, int width>
@@ -84,10 +84,6 @@ fused_add_rms_norm_cta_kernel(
       residual_o[idx] = temp;
     }
 
-    // Block-wide variance reduction using CUB
-    // using BlockReduce = cub::BlockReduce<float, 256>;
-    // __shared__ typename BlockReduce::TempStorage reduce_storage;
-    // float var_out = BlockReduce(reduce_storage).Reduce(variance, cub::Sum{});
     blockReduceSum<float, 1>(variance);
     if (threadIdx.x == 0)
     {
@@ -121,12 +117,13 @@ fused_add_rms_norm_cta_kernel(
     const float epsilon, const int num_tokens, const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 /* 
 * ********************************************************* *
-* FUSED RS + RESIDUAL ADD + RMS NORM CTA-BASED KERNEL  **** *
-* Function specialization in the case of      BF16 tensors. *
+* FUSED RS + RESIDUAL ADD + RMS NORM CTA-BASED KERNEL       *
+* Function specialization in the case of BF16 tensors.      *
 * ********************************************************* *
 */
 template <typename scalar_t, int width>
@@ -180,7 +177,6 @@ fused_rs_ln_cta_kernel(
     {
       auto mtemp = multimem_ld_reduce_add<16>(mcptr + offset_scalar + idx * width);
       vec_t temp = *(reinterpret_cast<vec_t *>(&mtemp));
-      // vec_t temp = input_o[idx];
       temp += residual_o[idx];
       variance[0] += temp.sum_squares(); // FP32 accumulation
       residual_o[idx] = temp;
@@ -228,6 +224,7 @@ fused_rs_ln_cta_kernel(
     const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 /* 
@@ -295,6 +292,7 @@ ar_cta_kernel(
     const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 /* 
@@ -369,6 +367,7 @@ rs_cta_kernel(
     const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 /* 
@@ -444,6 +443,7 @@ ag_cta_kernel(
     const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 /* 
@@ -528,6 +528,7 @@ simple_fusion_add_rms_norm_cta_kernel(
     const float epsilon, const int num_tokens, const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 template <typename scalar_t, int width>
@@ -589,6 +590,7 @@ simple_fusion_rs_cta_kernel(
     const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 template <typename scalar_t, int width>
@@ -651,6 +653,7 @@ simple_fusion_ag_cta_kernel(
     const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 template <typename scalar_t, int width>
@@ -695,6 +698,7 @@ simple_fusion_rs_ln_ag_cta_kernel(
     const int hidden_size)
 {
   /* Not supported */
+  assert(false && "TokenWeave currently only supports bf16 with width 8.");
 }
 
 } // namespace vllm
@@ -745,7 +749,6 @@ void fused_add_rms_norm_cta(torch::Tensor &input,    // [..., hidden_size]
   }
   else
   {
-    // LAUNCH_FUSED_ADD_RMS_NORM_CTA(0);
     TORCH_CHECK(false, "Input, residual, and weight tensors must be 16-byte aligned and hidden_size must be divisible by 8 for optimized kernel.");
   }
 }

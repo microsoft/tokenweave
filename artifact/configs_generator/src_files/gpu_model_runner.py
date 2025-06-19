@@ -278,9 +278,9 @@ class GPUModelRunner(LoRAModelRunnerMixin):
 
         #######  tokenweave ##############
         try:
-            self.chunk_offset = int(os.getenv("CHUNK_OFFSET", "0"))
+            self.split_offset = int(os.getenv("SPLIT_OFFSET", "0"))
         except ValueError:
-            self.chunk_offset = 0  # or some fallback
+            self.split_offset = 0  # or some fallback
         self.query_first_loc_cpu = torch.zeros(self.max_num_reqs + 1,
                                                dtype=torch.int32,
                                                device="cpu",
@@ -597,7 +597,7 @@ class GPUModelRunner(LoRAModelRunnerMixin):
         tokens_1 = []
         tokens_2 = []
         # TODO (Raja): Adding padding --- always multiple of 256
-        tokenweave_chunk_size = ((total_num_scheduled_tokens + 255) & ~255) // 2 + self.chunk_offset
+        tokenweave_split_size = ((total_num_scheduled_tokens + 255) & ~255) // 2 + self.split_offset
         use_first = True
         append_1 = tokens_1.append
         append_2 = tokens_2.append
@@ -606,18 +606,18 @@ class GPUModelRunner(LoRAModelRunnerMixin):
         for token in num_scheduled_tokens:
             curr += token
             if use_first:
-                if curr < tokenweave_chunk_size:
+                if curr < tokenweave_split_size:
                     append_1(token)
                     actual_tokens_in_split_1 += token
-                elif curr == tokenweave_chunk_size:
+                elif curr == tokenweave_split_size:
                     append_1(token)
                     actual_tokens_in_split_1 += token
                     use_first = False
                 else:
-                    append_1(tokenweave_chunk_size - prev)
-                    append_2(curr - tokenweave_chunk_size)
-                    actual_tokens_in_split_1 += (tokenweave_chunk_size - prev)
-                    actual_tokens_in_split_2 += (curr - tokenweave_chunk_size)
+                    append_1(tokenweave_split_size - prev)
+                    append_2(curr - tokenweave_split_size)
+                    actual_tokens_in_split_1 += (tokenweave_split_size - prev)
+                    actual_tokens_in_split_2 += (curr - tokenweave_split_size)
                     use_first = False
             else:
                 append_2(token)

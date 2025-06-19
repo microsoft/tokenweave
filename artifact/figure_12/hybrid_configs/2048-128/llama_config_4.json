@@ -1,4 +1,4 @@
 {
-  "1024": { "baseline_ctas": 32, "attention_ctas": 8, "mlp_ctas": 8, "chunk_offset": 0 },
-  "2048": { "baseline_ctas": 32, "attention_ctas": 8, "mlp_ctas": 4, "chunk_offset": 0 }
+  "1024": { "baseline_ctas": 32, "attention_ctas": 8, "mlp_ctas": 8, "split_offset": 0 },
+  "2048": { "baseline_ctas": 32, "attention_ctas": 8, "mlp_ctas": 4, "split_offset": 0 }
 }

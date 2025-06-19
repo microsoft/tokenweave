@@ -9,7 +9,7 @@ BATCH_SIZE=1
 NUM_ITERS=30
 NUM_ITERS_WARMUP=10
 NUM_GPUS_LIST=(8 4)
-CHUNK_OFFSET_LIST=(0 128 256)
+SPLIT_OFFSET_LIST=(0 128 256)
 MAX_CTAS_MLP_LIST=(2 4 8)
 MAX_CTAS_ATTN_LIST=(2 4 8)
 MAX_CTAS_LIST=(16 32)
@@ -31,7 +31,7 @@ log_info() {
 
 init_benchmark() {
     mkdir -p "$EVAL_DIR"
-    echo "model_name,gpu_count,impl,chunk_offset,attn_ctas,mlp_ctas,prompt_len,avg_latency(ms)" > "$MASTER_CSV"
+    echo "model_name,gpu_count,impl,split_offset,attn_ctas,mlp_ctas,prompt_len,avg_latency(ms)" > "$MASTER_CSV"
 }
 
 copy_model_files() {
@@ -118,12 +118,12 @@ for model in "${MODEL_NAME_LIST[@]}"; do
         done
 
         # Overlap Fused Implementations
-        for offset in "${CHUNK_OFFSET_LIST[@]}"; do
+        for offset in "${SPLIT_OFFSET_LIST[@]}"; do
             for attn_ctas in "${MAX_CTAS_ATTN_LIST[@]}"; do
                 for mlp_ctas in "${MAX_CTAS_MLP_LIST[@]}"; do
                     for impl in "${OVERLAP_FUSED_IMPL_LIST[@]}"; do
                         copy_model_files "$model" "$impl" "$src_dir" "$prefix" "$dst_file_path"
-                        export CHUNK_OFFSET=$offset
+                        export SPLIT_OFFSET=$offset
                         export MAX_CTAS_ATTN=$attn_ctas
                         export MAX_CTAS_MLP=$mlp_ctas
                         run_benchmark "$model_path" "$model" "$gpus" "$impl" "$offset" "$attn_ctas" "$mlp_ctas" "$extra_args"

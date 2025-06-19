@@ -251,13 +251,13 @@ class LlamaAttention(nn.Module):
         positions: torch.Tensor,
         hidden_states: torch.Tensor,
         split_id: Optional[int] = None,
-        chunk_size: Optional[int] = None,
+        split_size: Optional[int] = None,
         num_actual_tokens: Optional[int] = None,
     ) -> torch.Tensor:
         qkv, _ = self.qkv_proj(hidden_states)
         q, k, v = qkv.split([self.q_size, self.kv_size, self.kv_size], dim=-1)
         self.rotary_emb(positions, q[:num_actual_tokens], k[:num_actual_tokens])
-        attn_output = self.attn(q, k, v, split_id, chunk_size)
+        attn_output = self.attn(q, k, v, split_id, split_size)
         self.o_proj(attn_output, hidden_states,
                                 is_tokenweave=True)
         return hidden_states
@@ -329,11 +329,11 @@ class LlamaDecoderLayer(nn.Module):
         world_size: Optional[int] = 1,
         next_layer_norm: Optional[RMSNorm] = None,
         actual_tokens: Optional[int] = None,
-        nearest_multiple_of_world_size: Optional[int] = None,
+        num_tokens_padded: Optional[int] = None,
         MAX_CTAS_ATTN: Optional[int] = 16,
         MAX_CTAS_MLP: Optional[int] = 16,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
-        num_tokens_per_rank = nearest_multiple_of_world_size // world_size
+        num_tokens_per_rank = num_tokens_padded // world_size
         # Self Attention
         if residual is None:
             residual = torch.empty_like(hidden_states)
@@ -423,10 +423,10 @@ class LlamaModel(nn.Module):
             self.MAX_CTAS_MLP = 16
 
         try:
-            self.CHUNK_OFFSET = int(os.getenv("CHUNK_OFFSET", "0"))
+            self.SPLIT_OFFSET = int(os.getenv("SPLIT_OFFSET", "0"))
         except ValueError:
-            self.CHUNK_OFFSET = 0
-            
+            self.SPLIT_OFFSET = 0
+
         ## --------- TokenWeave: pl_baseline_fused --------- ##
 
         self.config = config
@@ -462,8 +462,8 @@ class LlamaModel(nn.Module):
             make_empty_intermediate_tensors_factory(
                 ["hidden_states", "residual"], config.hidden_size))
 
-    def get_input_embeddings(self, input_ids: torch.Tensor, output_buffer: torch.Tensor, is_tokenweave: Optional[bool] = False, chunk_size: Optional[int] = None) -> torch.Tensor:
-        return self.embed_tokens(input_ids, output_parallel=output_buffer, use_pytorch_all_reduce=False, is_overlap=is_tokenweave, symm_mem_hdl=self.symm_mem_hdl, chunk_size=chunk_size)
+    def get_input_embeddings(self, input_ids: torch.Tensor, output_buffer: torch.Tensor, is_tokenweave: Optional[bool] = False, split_size: Optional[int] = None) -> torch.Tensor:
+        return self.embed_tokens(input_ids, output_parallel=output_buffer, use_pytorch_all_reduce=False, is_overlap=is_tokenweave, symm_mem_hdl=self.symm_mem_hdl, split_size=split_size)
 
     def forward(
         self,
@@ -487,8 +487,8 @@ class LlamaModel(nn.Module):
             hidden_states = intermediate_tensors["hidden_states"]
             residual = intermediate_tensors["residual"]
     
-        nearest_multiple_of_world_size = (num_tokens + world_size - 1) // world_size * world_size
-        hidden_states = self.staging_buffer[:nearest_multiple_of_world_size]
+        num_tokens_padded = (num_tokens + world_size - 1) // world_size * world_size
+        hidden_states = self.staging_buffer[:num_tokens_padded]
         for layer_id in range(self.start_layer, self.end_layer):
             layer = self.layers[layer_id]
             next_layer_norm = self.layers[layer_id + 1].input_layernorm if layer_id < self.end_layer - 1 else self.norm
@@ -504,9 +504,9 @@ class LlamaModel(nn.Module):
                 # current_stream is not used in default flow
                 # copy_stream is not used in default flow
                 next_layer_norm,
-                # tokenweave_chunk_size is not used in default flow
+                # tokenweave_split_size is not used in default flow
                 num_tokens,
-                nearest_multiple_of_world_size,
+                num_tokens_padded,
                 self.MAX_CTAS_ATTN,
                 self.MAX_CTAS_MLP,
             )

@@ -291,9 +291,9 @@ class MixtralModel(nn.Module):
             self.MAX_CTAS_MLP = 8
 
         try:
-            self.CHUNK_OFFSET = int(os.getenv("CHUNK_OFFSET", "0"))
+            self.SPLIT_OFFSET = int(os.getenv("SPLIT_OFFSET", "0"))
         except ValueError:
-            self.CHUNK_OFFSET = 0
+            self.SPLIT_OFFSET = 0
         ## --------- TokenWeave: pm_baseline_multimem --------- ##
 
         self.config = config

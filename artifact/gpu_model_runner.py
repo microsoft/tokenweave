@@ -288,7 +288,7 @@ class GPUModelRunner(LoRAModelRunnerMixin):
         self.seq_lens_np = self.seq_lens_cpu.numpy()
 
         #######  tokenweave ##############
-        self.chunk_offset = 0
+        self.split_offset = 0
         world_size = get_tensor_model_parallel_world_size()
         self.config_data = None
         if "Llama-3.3-70B" in model_config.model:
@@ -619,10 +619,10 @@ class GPUModelRunner(LoRAModelRunnerMixin):
         if self.config_data is not None:
             closest_len = min(self.config_data.keys(), key=lambda k: abs(k - total_num_scheduled_tokens))
             tokenweave_config = self.config_data[closest_len]
-            self.chunk_offset = tokenweave_config["chunk_offset"]
+            self.split_offset = tokenweave_config["split_offset"]
         else:
-            self.chunk_offset = os.environ.get("TOKENWEAVE_CHUNK_OFFSET", 0)
-        tokenweave_chunk_size = ((total_num_scheduled_tokens + 255) & ~255) // 2 + self.chunk_offset
+            self.split_offset = os.environ.get("TOKENWEAVE_SPLIT_OFFSET", 0)
+        tokenweave_split_size = ((total_num_scheduled_tokens + 255) & ~255) // 2 + self.split_offset
         use_first = True
         append_1 = tokens_1.append
         append_2 = tokens_2.append
@@ -632,18 +632,18 @@ class GPUModelRunner(LoRAModelRunnerMixin):
             token = int(token)
             curr += token
             if use_first:
-                if curr < tokenweave_chunk_size:
+                if curr < tokenweave_split_size:
                     append_1(token)
                     actual_tokens_in_split_1 += token
-                elif curr == tokenweave_chunk_size:
+                elif curr == tokenweave_split_size:
                     append_1(token)
                     actual_tokens_in_split_1 += token
                     use_first = False
                 else:
-                    append_1(tokenweave_chunk_size - prev)
-                    append_2(curr - tokenweave_chunk_size)
-                    actual_tokens_in_split_1 += (tokenweave_chunk_size - prev)
-                    actual_tokens_in_split_2 += (curr - tokenweave_chunk_size)
+                    append_1(tokenweave_split_size - prev)
+                    append_2(curr - tokenweave_split_size)
+                    actual_tokens_in_split_1 += (tokenweave_split_size - prev)
+                    actual_tokens_in_split_2 += (curr - tokenweave_split_size)
                     use_first = False
             else:
                 append_2(token)

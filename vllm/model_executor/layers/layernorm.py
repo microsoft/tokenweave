@@ -128,83 +128,6 @@ def rocm_aiter_fused_add_rms_norm(
     )
     return x, residual
 
-# @triton.jit
-# def fused_add_rmsnorm_cta_kernel_inplace_both(
-#     input_ptr, residual_ptr, weight_ptr,
-#     epsilon, hidden_size, num_tokens, tokens_per_cta,
-#     BLOCK_SIZE: tl.constexpr
-# ):
-#     pid = tl.program_id(0)  # program processes a single token
-#     hidden_offsets = tl.arange(0, BLOCK_SIZE)
-
-#     for i in range(tokens_per_cta):
-#         token_idx = pid * tokens_per_cta + i
-#         if token_idx < num_tokens:
-
-#             # Accumulate sum of squares for RMS
-#             sum_sq = 0.0
-
-#             for offset in range(0, hidden_size, BLOCK_SIZE):
-#                 offs = token_idx * hidden_size + offset + hidden_offsets
-#                 mask = hidden_offsets + offset < hidden_size
-
-#                 x = tl.load(input_ptr + offs, mask=mask).to(tl.float32)
-#                 r = tl.load(residual_ptr + offs, mask=mask).to(tl.float32)
-
-#                 y = x + r
-#                 tl.store(residual_ptr + offs, y.to(tl.float16), mask=mask)
-
-#                 # Mask before summing
-#                 masked_y_sq = y * y * mask.to(tl.float32)
-#                 sum_sq += tl.sum(masked_y_sq)
-
-#             mean_sq = sum_sq / hidden_size
-#             rms = tl.sqrt(mean_sq + epsilon)
-#             inv_rms = 1.0 / rms
-
-#             # Normalize + apply weight in second pass
-#             for offset in range(0, hidden_size, BLOCK_SIZE):
-#                 offs = token_idx * hidden_size + offset + hidden_offsets
-#                 mask = hidden_offsets + offset < hidden_size
-
-#                 y = tl.load(residual_ptr + offs, mask=mask).to(tl.float32)
-#                 w = tl.load(weight_ptr + offset + hidden_offsets, mask=mask).to(tl.float32)
-
-#                 normed = y * inv_rms * w
-#                 tl.store(input_ptr + offs, normed.to(tl.float16), mask=mask)
-
-
-
-# def fused_add_rmsnorm_inplace_both(
-#     input: torch.Tensor,
-#     residual: torch.Tensor,
-#     weight: torch.Tensor,
-#     epsilon: float = 1e-5,
-#     MAX_CTAs: int = 4
-# ):
-#     assert input.shape == residual.shape
-#     num_tokens, hidden_size = input.shape
-#     BLOCK_SIZE = 1024
-
-#     tokens_per_cta = (num_tokens + MAX_CTAs - 1) // MAX_CTAs
-
-#     grid = lambda meta: (MAX_CTAs,)
-
-#     fused_add_rmsnorm_cta_kernel_inplace_both[grid](
-#         input_ptr=input,
-#         residual_ptr=residual,
-#         weight_ptr=weight,
-#         epsilon=epsilon,
-#         hidden_size=hidden_size,
-#         num_tokens=num_tokens,
-#         tokens_per_cta=tokens_per_cta,
-#         BLOCK_SIZE=BLOCK_SIZE,
-#         num_warps=4,
-#         num_stages=2,
-#     )
-
-#     return input, residual  # In-place modified tensor (also `residual` is updated before normalization)
-
 
 def dispatch_cuda_rmsnorm_func(add_residual: bool):
     if add_residual:
@@ -301,15 +224,6 @@ class RMSNorm(CustomOp):
     ) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
         if self.variance_size_override is not None:
             return self.forward_native(x, residual)
-
-        # add_residual = residual is not None
-        # norm_func = dispatch_cuda_rmsnorm_func(add_residual)
-
-        # if add_residual:
-        #     return norm_func(x, residual, self.weight.data,
-        #                      self.variance_epsilon)
-        # else:
-        #     return norm_func(x, self.weight.data, self.variance_epsilon)
 
         if fused_ar:
             return fused_rs_ln_ag_cta(

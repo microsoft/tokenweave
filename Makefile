@@ -9,7 +9,8 @@ help:
 	@echo "  make run_qwen2      Run with model: qwen2"
 	@echo "  make run_mixtral    Run with model: mixtral"
 	@echo "  install_dependencies - Install Python dependencies"
-	@echo "  install_miniconda - Install Miniconda and create environment"
+	@echo "  install_miniconda - Install Miniconda"
+	@echo "  create_env - create environment"
 	@echo "  make clean          Remove build artifacts, __pycache__, .so files"
 	@echo ""
 
@@ -32,7 +33,7 @@ install_dependencies:
 	@pip install --upgrade huggingface_hub
 	@pip install https://github.com/flashinfer-ai/flashinfer/releases/download/v0.2.2.post1/flashinfer_python-0.2.2.post1+cu124torch2.6-cp38-abi3-linux_x86_64.whl
 
-# Miniconda installation
+# Install Miniconda only
 install_miniconda:
 	@echo "Installing Miniconda..."
 	@mkdir -p ~/miniconda3
@@ -45,6 +46,10 @@ install_miniconda:
 		bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3; \
 		~/miniconda3/condabin/conda init; \
 	fi
+
+# Create tokenweave environment
+create_env:
+	@echo "Checking for tokenweave environment..."
 	@if ! ~/miniconda3/bin/conda env list | grep -q tokenweave 2>/dev/null; then \
 		echo "Creating tokenweave environment..."; \
 		~/miniconda3/bin/conda create -n tokenweave python=3.12 -y; \
@@ -58,6 +63,6 @@ clean:
 	@bash -c 'find . -type f -name "*.so" -exec rm -f {} +'
 	@rm -rf build dist *.egg-info raw_output*.txt debug*.txt
 	@rm -rf .venv venv
-	@rm vllm/_version.py
+	@rm -f vllm/_version.py
 	@pip3 uninstall vllm -y
 	@echo "Done."

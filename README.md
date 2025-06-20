@@ -43,6 +43,7 @@ git clone https://github.com/microsoft/tokenweave.git
 cd tokenweave
 # Install miniconda; skip if already installed
 make install_miniconda # 30 seconds
+make create_env
 bash # Refresh shell and activate
 conda activate tokenweave
 make install # 18 minutes

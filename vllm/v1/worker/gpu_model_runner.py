@@ -302,6 +302,8 @@ class GPUModelRunner(LoRAModelRunnerMixin):
             self.config_data = load_config(f"tokenweave_configs/qwen2_config_{world_size}.json")
         elif "Mixtral-8x22B" in model_config.model:
             self.config_data = load_config(f"tokenweave_configs/mixtral_config_{world_size}.json")
+        elif "Qwen/Qwen3-235B-A22B" in model_config.model:
+            self.config_data = load_config(f"tokenweave_configs/qwen3moe_config_{world_size}.json")
 
         self.query_first_loc_cpu = torch.zeros(self.max_num_reqs + 1,
                                                dtype=torch.int32,

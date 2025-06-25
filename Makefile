@@ -1,13 +1,14 @@
-.PHONY: help install clean run_llama3 run_qwen2 run_mixtral
+.PHONY: help install clean run_llama3 run_qwen2 run_qwen3moe run_mixtral
 
 # Default target
 help:
 	@echo ""
 	@echo "Available commands:"
 	@echo "  make install        Install project in editable mode"
-	@echo "  make run_llama3     Run with model: llama3"
-	@echo "  make run_qwen2      Run with model: qwen2"
-	@echo "  make run_mixtral    Run with model: mixtral"
+	@echo "  make run_llama3     Run with model: "meta-llama/Llama-3.3-70B-Instruct""
+	@echo "  make run_qwen2      Run with model: "Qwen/Qwen2.5-72B-Instruct""
+	@echo "  make run_qwen3moe    Run with model: "Qwen/Qwen3-235B-A22B""
+	@echo "  make run_mixtral    Run with model: "mistralai/Mixtral-8x22B-Instruct-v0.1""
 	@echo "  install_dependencies - Install Python dependencies"
 	@echo "  install_miniconda - Install Miniconda"
 	@echo "  create_env - create environment"
@@ -22,6 +23,9 @@ run_llama3:
 
 run_qwen2:
 	@python3 tokenweave_offline_example.py --model qwen2
+
+run_qwen3moe:
+	@python3 tokenweave_offline_example.py --model qwen3moe
 
 run_mixtral:
 	@python3 tokenweave_offline_example.py --model mixtral

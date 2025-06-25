@@ -34,7 +34,6 @@ sampling_params = SamplingParams(
 print(sampling_params)
 
 # Environment settings
-os.environ["VLLM_TORCH_PROFILER_DIR"] = "/vllm-workspace/tokenweave"
 os.environ["VLLM_USE_V1"] = "1"
 
 # -------------------------
@@ -43,9 +42,9 @@ os.environ["VLLM_USE_V1"] = "1"
 parser = argparse.ArgumentParser(description="Run inference with a selected model.")
 parser.add_argument(
     "--model",
-    choices=["mixtral", "qwen2", "llama3"],
+    choices=["mixtral", "qwen2", "qwen3moe", "llama3"],
     required=True,
-    help="Select the model to use: mixtral, qwen2, or llama3",
+    help="Select the model to use: mixtral, qwen2, qwen3moe, or llama3",
 )
 args = parser.parse_args()
 
@@ -58,7 +57,7 @@ if args.model == "mixtral":
         enforce_eager=True,
         disable_custom_all_reduce=True,
         enable_chunked_prefill=True,
-        max_num_batched_tokens=2048,
+        max_num_batched_tokens=4096,
         enable_prefix_caching=False,
     )
 elif args.model == "qwen2":
@@ -69,6 +68,16 @@ elif args.model == "qwen2":
         disable_custom_all_reduce=True,
         enable_chunked_prefill=True,
         max_num_batched_tokens=2048,
+        enable_prefix_caching=False,
+    )
+elif args.model == "qwen3moe":
+    llm = LLM(
+        model="Qwen/Qwen3-235B-A22B",
+        tensor_parallel_size=8,
+        enforce_eager=True,
+        disable_custom_all_reduce=True,
+        enable_chunked_prefill=True,
+        max_num_batched_tokens=4096,
         enable_prefix_caching=False,
     )
 else:  # llama3

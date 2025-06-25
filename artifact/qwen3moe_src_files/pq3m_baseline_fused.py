@@ -222,9 +222,6 @@ class Qwen3MoeAttention(nn.Module):
         self,
         positions: torch.Tensor,
         hidden_states: torch.Tensor,
-        split_id: Optional[int] = None,
-        split_size: Optional[int] = None,
-        num_actual_tokens: Optional[int] = None,
     ) -> torch.Tensor:
         qkv, _ = self.qkv_proj(hidden_states)
         q, k, v = qkv.split([self.q_size, self.kv_size, self.kv_size], dim=-1)
@@ -238,16 +235,8 @@ class Qwen3MoeAttention(nn.Module):
                            self.head_dim)
         k_by_head = self.k_norm.forward_native(k_by_head)
         k = k_by_head.view(k.shape)
-        if split_id is not None and split_size is not None:
-            # TokenWeave Mode
-            assert num_actual_tokens is not None
-            self.rotary_emb(positions, q[:num_actual_tokens], k[:num_actual_tokens])
-            attn_output = self.attn(q, k, v, split_id, split_size)
-        else:
-            # Default Mode
-            q, k = self.rotary_emb(positions, q, k)
-            attn_output = self.attn(q, k, v)
-        # inplace + no all reduce
+        q, k = self.rotary_emb(positions, q, k)
+        attn_output = self.attn(q, k, v)
         self.o_proj(attn_output, hidden_states,
                                 is_tokenweave=True)
         return hidden_states
@@ -361,60 +350,6 @@ class Qwen3MoeDecoderLayer(nn.Module):
             )
         )
 
-    def forward_tokenweave(
-        self,
-        positions: torch.Tensor,
-        hidden_states: torch.Tensor,
-        residual: Optional[torch.Tensor],
-        symm_mem_hdl: Any,
-        layer_id: int,
-        end_layer: Optional[int] = None,
-        rank: int = 0,
-        world_size: int = 1,
-        current_stream: torch.cuda.Stream = None,
-        copy_stream: torch.cuda.Stream = None,
-        next_layer_norm: RMSNorm = None,
-        split_size: int = None,
-        actual_tokens: int = None,
-        num_tokens_padded: int = None,
-        MAX_CTAS_ATTN: int = 16,
-        MAX_CTAS_MLP: int = 16,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
-        Performs forward pass of a transformer block using TokenWeave overlap strategy.
-        Processes two token splits (interleaved) across GPUs with communication-compute overlap.
-
-        Returns:
-            Tuple[torch.Tensor, torch.Tensor]: Updated hidden_states and residual tensors.
-        """
-        assert split_size is not None and actual_tokens is not None, "split_size and actual_tokens are required"
-        assert current_stream is not None and copy_stream is not None, "CUDA streams must be provided"
-        assert next_layer_norm is not None, "next_layer_norm must be provided"
-        
-        return tokenweave_overlap(
-            self,
-            * (
-                positions,
-                hidden_states,
-                residual,
-                symm_mem_hdl,
-                layer_id,
-                end_layer,
-                rank,
-                world_size,
-                current_stream,
-                copy_stream,
-                next_layer_norm,
-                split_size,
-                actual_tokens,
-                num_tokens_padded,
-                MAX_CTAS_ATTN,
-                MAX_CTAS_MLP,
-                self.mlp.forward,
-            )
-        )
-
-
 @support_torch_compile
 class Qwen3MoeModel(nn.Module):
 
@@ -432,8 +367,6 @@ class Qwen3MoeModel(nn.Module):
                                           dtype=vllm_config.model_config.dtype,
                                           device="cuda")
         self.symm_mem_hdl = symm_mem.rendezvous(self.staging_buffer, get_device_group())
-        self.current_stream = torch.cuda.current_stream()
-        self.copy_stream = torch.cuda.Stream(priority=-1)
         self.buff = None
 
         world_size = get_tensor_model_parallel_world_size()
@@ -489,16 +422,8 @@ class Qwen3MoeModel(nn.Module):
         num_tokens = input_ids.shape[0] if input_ids is not None else inputs_embeds.shape[0]
         # TokenWeave is enabled when num_tokens >= 2048
         # This can be adjusted based on the model, world size and other factors.
-        is_tokenweave = num_tokens >= 2048
+        is_tokenweave = False
         tokenweave_split_size = None
-        if is_tokenweave:
-            # Load the tokenweave config based on the number of tokens
-            closest_len = min(self.config_data.keys(), key=lambda k: abs(k - num_tokens))
-            tokenweave_config = self.config_data[closest_len]
-            self.MAX_CTAS_ATTN = tokenweave_config["attention_ctas"]
-            self.MAX_CTAS_MLP = tokenweave_config["mlp_ctas"]
-            self.SPLIT_OFFSET = tokenweave_config["split_offset"]
-            tokenweave_split_size = (((num_tokens + 255) & ~255) // 2 + self.SPLIT_OFFSET) if is_tokenweave else None
         if get_pp_group().is_first_rank:
             if inputs_embeds is not None:
                 self.buff = self.staging_buffer[:inputs_embeds.shape[0]]
@@ -512,61 +437,35 @@ class Qwen3MoeModel(nn.Module):
             hidden_states = intermediate_tensors["hidden_states"]
             residual = intermediate_tensors["residual"]
         
-        if not is_tokenweave: # with fuse only
-            num_tokens_padded = (num_tokens + world_size - 1) // world_size * world_size
-            hidden_states = self.staging_buffer[:num_tokens_padded]
-            for layer_id in range(self.start_layer, self.end_layer):
-                layer = self.layers[layer_id]
-                next_layer_norm = self.layers[layer_id + 1].input_layernorm if layer_id < self.end_layer - 1 else self.norm
-                hidden_states, residual = layer.forward_with_fuse_only(
-                    positions, 
-                    hidden_states, 
-                    residual, 
-                    self.symm_mem_hdl, 
-                    layer_id,
-                    # end_layer is not used in with fuse only flow
-                    rank,
-                    world_size,
-                    # current_stream is not used in with fuse only flow
-                    # copy_stream is not used in with fuse only flow
-                    next_layer_norm,
-                    # tokenweave_split_size is not used in with fuse only flow
-                    num_tokens,
-                    num_tokens_padded,
-                    self.MAX_CTAS_ATTN,
-                    self.MAX_CTAS_MLP,
-                )
-
-            if not get_pp_group().is_last_rank:
-                return IntermediateTensors({
-                    "hidden_states": hidden_states,
-                    "residual": residual
-                })
-            return hidden_states[:num_tokens]
-        # TokenWeave
-        num_tokens_padded = (num_tokens + 255) & ~255
-        # print(f"{num_tokens=}, {num_tokens_padded=}", flush=True)
+        num_tokens_padded = (num_tokens + world_size - 1) // world_size * world_size
         hidden_states = self.staging_buffer[:num_tokens_padded]
         for layer_id in range(self.start_layer, self.end_layer):
             layer = self.layers[layer_id]
             next_layer_norm = self.layers[layer_id + 1].input_layernorm if layer_id < self.end_layer - 1 else self.norm
-            hidden_states, residual = layer.forward_tokenweave(positions, 
-                                            hidden_states, 
-                                            residual, 
-                                            self.symm_mem_hdl, 
-                                            layer_id, 
-                                            self.end_layer, 
-                                            rank, 
-                                            world_size,
-                                            self.current_stream,
-                                            self.copy_stream,
-                                            next_layer_norm,
-                                            tokenweave_split_size,
-                                            num_tokens,
-                                            num_tokens_padded,
-                                            self.MAX_CTAS_ATTN,
-                                            self.MAX_CTAS_MLP,
-                                            )
+            hidden_states, residual = layer.forward_with_fuse_only(
+                positions, 
+                hidden_states, 
+                residual, 
+                self.symm_mem_hdl, 
+                layer_id,
+                # end_layer is not used in with fuse only flow
+                rank,
+                world_size,
+                # current_stream is not used in with fuse only flow
+                # copy_stream is not used in with fuse only flow
+                next_layer_norm,
+                # tokenweave_split_size is not used in with fuse only flow
+                num_tokens,
+                num_tokens_padded,
+                self.MAX_CTAS_ATTN,
+                self.MAX_CTAS_MLP,
+            )
+
+        if not get_pp_group().is_last_rank:
+            return IntermediateTensors({
+                "hidden_states": hidden_states,
+                "residual": residual
+            })
         return hidden_states[:num_tokens]
 
     def load_weights(self, weights: Iterable[Tuple[str,

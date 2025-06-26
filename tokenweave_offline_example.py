@@ -77,7 +77,7 @@ elif args.model == "qwen3moe":
         enforce_eager=True,
         disable_custom_all_reduce=True,
         enable_chunked_prefill=True,
-        max_num_batched_tokens=4096,
+        max_num_batched_tokens=8096,
         enable_prefix_caching=False,
     )
 else:  # llama3

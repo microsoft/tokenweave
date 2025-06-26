@@ -55,21 +55,21 @@ def fused_add_rms_norm(
     return x, residual
 
 def fused_add_rms_norm_cta(
-        x: torch.Tensor, residual: torch.Tensor, weight: torch.Tensor, MAX_CTAs: int,
+        x: torch.Tensor, residual: torch.Tensor, weight: torch.Tensor, MAX_CTAS: int,
         variance_epsilon: float) -> Tuple[torch.Tensor, torch.Tensor]:
     from vllm import _custom_ops as ops
     ops.fused_add_rms_norm_cta(
         x,
         residual,
         weight,
-        MAX_CTAs,
+        MAX_CTAS,
         variance_epsilon,
     )
     return x, residual
 
 def fused_rs_ln_ag_cta(
     x: torch.Tensor, residual: torch.Tensor, weight: torch.Tensor,
-    symm_mem_hdl, rank: int, world_size: int, MAX_CTAs: int, offset: int,
+    symm_mem_hdl, rank: int, world_size: int, MAX_CTAS: int, offset: int,
     variance_epsilon: float) -> Tuple[torch.Tensor, torch.Tensor]:    
     from vllm import _custom_ops as ops
     ops.fused_rs_ln_ag_cta(
@@ -80,14 +80,14 @@ def fused_rs_ln_ag_cta(
             symm_mem_hdl.signal_pad_ptrs_dev,
             rank,
             world_size,
-            MAX_CTAs,
+            MAX_CTAS,
             variance_epsilon
         )
     return x, residual
 
 def fused_rs_ln_cta(
     x: torch.Tensor, residual: torch.Tensor, weight: torch.Tensor,
-    symm_mem_hdl, rank: int, world_size: int, MAX_CTAs: int, offset: int,
+    symm_mem_hdl, rank: int, world_size: int, MAX_CTAS: int, offset: int,
     variance_epsilon: float) -> Tuple[torch.Tensor, torch.Tensor]:    
     from vllm import _custom_ops as ops
     ops.fused_rs_ln_cta(
@@ -98,7 +98,7 @@ def fused_rs_ln_cta(
             symm_mem_hdl.signal_pad_ptrs_dev,
             rank,
             world_size,
-            MAX_CTAs,
+            MAX_CTAS,
             variance_epsilon
         )
     return x, residual

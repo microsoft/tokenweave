@@ -315,7 +315,7 @@ def tokenweave_overlap(
             num_tokens_per_rank=blpr_1,
             rank=rank,
             world_size=world_size,
-            MAX_CTAS=MAX_CTAS_ATTN,
+            MAX_CTAS=MAX_CTAS_MLP,
             offset_symm_mem=0
         )
     

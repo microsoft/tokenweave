@@ -224,13 +224,13 @@ void fused_rs_ln_ag_cta(torch::Tensor &input,    // [..., hidden_size]
                         int64_t signal_pads,     // [..., hidden_size] signal pads
                         int64_t rank,
                         int64_t world_size,
-                        int64_t MAX_CTAs,
+                        int64_t MAX_CTAS,
                         double epsilon)
 {
   int hidden_size = input.size(-1);
   int num_tokens = input.numel() / hidden_size;
 
-  dim3 grid(MAX_CTAs);                                          // full coverage
+  dim3 grid(MAX_CTAS);                                          // full coverage
   dim3 block(std::min(1024, (hidden_size / 8 + 31) / 32 * 32)); // match kernel assumptions
   /* This kernel is memory-latency bound in many scenarios.
      When num_tokens is large, a smaller block size allows

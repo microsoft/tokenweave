@@ -54,7 +54,7 @@ if args.model == "mixtral":
     llm = LLM(
         model="mistralai/Mixtral-8x22B-Instruct-v0.1",
         tokenizer_mode="mistral",
-        tensor_parallel_size=8,
+        tensor_parallel_size=4,
         enforce_eager=True,
         disable_custom_all_reduce=True,
         enable_chunked_prefill=True,
@@ -64,7 +64,7 @@ if args.model == "mixtral":
 elif args.model == "qwen2":
     llm = LLM(
         model="Qwen/Qwen2.5-72B-Instruct",
-        tensor_parallel_size=8,
+        tensor_parallel_size=4,
         enforce_eager=True,
         disable_custom_all_reduce=True,
         enable_chunked_prefill=True,
@@ -74,7 +74,7 @@ elif args.model == "qwen2":
 else:  # llama3
     llm = LLM(
         model="meta-llama/Llama-3.3-70B-Instruct",
-        tensor_parallel_size=8,
+        tensor_parallel_size=4,
         enforce_eager=True,
         disable_custom_all_reduce=True,
         enable_chunked_prefill=True,

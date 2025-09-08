@@ -28,14 +28,14 @@ TokenWeave addresses this by introducing a **coarse-grained compute-communicatio
 
 ## Prerequisites
 
-- **Compilation**: CUDA 12.4  
-- **Runtime environment**: Python 3.12, PyTorch 2.6.0, Ubuntu 22.04  
+- **Compilation**: CUDA 12.8  
+- **Runtime environment**: Python 3.12, PyTorch 2.8.0, Ubuntu 22.04  
 - **Hardware**: 8×H100 DGX system with NVLink interconnects
 
 ## Installation
 
 To ease the setup, we recommend using either of these two Docker images:
-- `pytorch/pytorch:2.6.0-cuda12.4-cudnn9-devel` or 
+- `pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel` or 
 - `vllm/vllm-openai:v0.8.5`
 ```bash
 apt-get update; apt-get upgrade -y; apt-get install kmod git build-essential tmux -y   

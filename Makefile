@@ -31,7 +31,9 @@ install_dependencies:
 	@echo "Installing Python dependencies..."
 	@pip3 install matplotlib pandas seaborn
 	@pip install --upgrade huggingface_hub
-	@pip install https://github.com/flashinfer-ai/flashinfer/releases/download/v0.2.2.post1/flashinfer_python-0.2.2.post1+cu124torch2.6-cp38-abi3-linux_x86_64.whl
+	# Updated for Torch 2.8.0 & CUDA 12.8. Adjust the wheel version if a newer flashinfer release is available.
+	@pip install https://github.com/flashinfer-ai/flashinfer/releases/download/v0.2.2.post1/flashinfer_python-0.2.2.post1+cu128torch2.8-cp38-abi3-linux_x86_64.whl || \
+	  echo "Warning: Prebuilt flashinfer wheel for cu128/torch2.8 not found. Please update this URL accordingly or install flashinfer from source."
 
 # Install Miniconda only
 install_miniconda:

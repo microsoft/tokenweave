@@ -46,9 +46,7 @@ make install_miniconda # 30 seconds
 make create_env
 bash # Refresh shell and activate
 conda activate tokenweave
-make install # 18 minutes
-# or alternatively:
-pip3 install -v -e .
+make install # 18 minutes # or alternatively: pip3 install -v -e .
 make install_dependencies # 17 seconds
 ```
 

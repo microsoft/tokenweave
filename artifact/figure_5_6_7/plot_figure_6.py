@@ -30,7 +30,7 @@ sns.set_context("paper")
 
 x_pos = np.arange(len(seq_lens))
 ax.plot(x_pos, df_runtime['achieved_bandwidth'], marker='o', markersize=10,
-        label='ReduceScatter (Multimem)', linewidth=3, color='tab:green')
+        label='AllReduce (Multimem)', linewidth=3, color='tab:green')
 for i, val in enumerate(df_runtime['achieved_bandwidth']):
     ax.annotate(f"{val:.1f}\nGB/s", (x_pos[i], val), textcoords="offset points",
                 xytext=(-10, -40), fontsize=16)

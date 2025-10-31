@@ -80,8 +80,8 @@ import matplotlib as mpl
 mpl.rcParams.update({
     "pgf.rcfonts": False,              # Ignore matplotlib font settings
 })
-seq_lens = [64, 128, 2048, 4096, 16384, 32768]
-x_ticks = ['64', '128', '2K', '4K', '16K', '32K']
+seq_lens = [64, 128, 256, 512, 1024, 2048]
+x_ticks = ['64', '128', '256', '512', '1K', '2K']
 fig, ax = plt.subplots(figsize=(12, 8))
 
 width = 0.20

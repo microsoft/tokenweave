@@ -126,8 +126,17 @@ fused_rs_ln_ag_cta_kernel(
 
     for (int idx = tid; idx < vec_hidden_size; idx += bdimx)
     {
-      auto mtemp = multimem_ld_reduce_add<16>(mcptr + offset_scalar + idx * width);
-      vec_t temp = *(reinterpret_cast<vec_t *>(&mtemp));
+      // For Hooper or newer
+      #if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 900) {
+        auto mtemp = multimem_ld_reduce_add<16>(mcptr + offset_scalar + idx * width);
+        vec_t temp = *(reinterpret_cast<vec_t *>(&mtemp));
+      }
+      // For Ampere or older
+      // Distributed shared memory is only available for Hopper or newer architectures.
+      #else {
+        vec_t temp = *reinterpret_cast<vec_t *>(mcptr + offset_scalar + idx * width);
+
+      }
       temp += residual_o[idx];
       variance[0] += temp.sum_squares(); // FP32 accumulation
       residual_o[idx] = temp;
@@ -147,7 +156,15 @@ fused_rs_ln_ag_cta_kernel(
       vec_t temp = residual_o[idx];
       temp *= s_variance;
       temp *= shared_weight;
-      multimem_st<16>(mcptr + offset_scalar + idx * width, *(reinterpret_cast<Vec<16> *>(&temp)));
+      // For Hooper or newer
+      #if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ >= 900) {
+        multimem_st<16>(mcptr + offset_scalar + idx * width, *(reinterpret_cast<Vec<16> *>(&temp)));
+      }
+      // For Ampere or older
+      // Distributed shared memory is only available for Hopper or newer architectures.
+      #else {
+        *reinterpret_cast<vec_t *>(mcptr + offset_scalar + idx * width) = temp;
+      }
     }
   }
   __syncthreads();

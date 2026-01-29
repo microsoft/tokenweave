@@ -9,7 +9,7 @@ Efficient Compute-Communication Overlap for Distributed LLM Inference
 </h3>
 
 <p align="center">
-| <a href="https://arxiv.org/abs/2505.11329"><b>Paper</b></a> |
+| <a href="https://arxiv.org/abs/2505.11329"><b>Paper</b></a> | <strong>Accepted to MLSys 2026</strong> |
 </p>
 
 ## Overview

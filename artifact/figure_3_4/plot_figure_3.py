@@ -43,10 +43,10 @@ runtime_hatches = {
 
 runtime_alpha = {key: 0.6 for key in cfg_labels.values()}
 
-data_path = os.path.join(indir, 'figure_5_6_7_hs_8192.csv')
+data_path = os.path.join(indir, 'figure_3_4_hs_8192.csv')
 df_runtime = pd.read_csv(data_path)
 filtered_df = df_runtime.loc[df_runtime.groupby('BL')['multimem_ar_us'].idxmin()].copy()
-filtered_path = os.path.join(csvdir, 'figure_5.csv')
+filtered_path = os.path.join(csvdir, 'figure_3.csv')
 filtered_df.to_csv(filtered_path, index=False)
 df_runtime = filtered_df
 
@@ -153,6 +153,6 @@ legend = fig.legend(handles1 + handles_line1, labels1 + labels_line1,
            bbox_to_anchor=(0.5, 1.12), frameon=False)
 
 os.makedirs(outdir, exist_ok=True)
-out_path_pdf = os.path.join(outdir, "figure_5.pdf")
+out_path_pdf = os.path.join(outdir, "figure_3.pdf")
 plt.tight_layout()
 plt.savefig(out_path_pdf, bbox_inches='tight', dpi=1200)

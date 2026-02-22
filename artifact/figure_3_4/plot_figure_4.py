@@ -11,13 +11,13 @@ csvdir = sys.argv[3]
 seq_lens = [64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768]
 x_ticks = ['64', '128', '256', '512', '1K', '2K', '4K', '8K', '16K', '32K']
 
-data_path = os.path.join(indir, 'figure_5_6_7_hs_8192.csv')
+data_path = os.path.join(indir, 'figure_3_4_hs_8192.csv')
 df_runtime = pd.read_csv(data_path)
 
 filtered_df = df_runtime.loc[df_runtime.groupby('BL')['multimem_ar_us'].idxmin()].copy()
 
 
-filtered_path = os.path.join(csvdir, 'figure_6.csv')
+filtered_path = os.path.join(csvdir, 'figure_4.csv')
 filtered_df.to_csv(filtered_path, index=False)
 
 df_runtime = filtered_df
@@ -49,4 +49,4 @@ ax.legend(fontsize=24, frameon=False)
 # Tight layout and save
 plt.tight_layout()
 os.makedirs(outdir, exist_ok=True)
-plt.savefig(os.path.join(outdir, "figure_6.pdf"), bbox_inches='tight', dpi=1200)
+plt.savefig(os.path.join(outdir, "figure_4.pdf"), bbox_inches='tight', dpi=1200)

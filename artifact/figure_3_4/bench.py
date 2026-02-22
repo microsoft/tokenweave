@@ -172,7 +172,7 @@ def main(hidden_size: int, output_dir: str, atol: float, rtol: float):
     try:
         if dist.get_rank() == 0:
             Path(output_dir).mkdir(parents=True, exist_ok=True)
-            csv_file = open(Path(output_dir) / f"figure_5_6_7_hs_{hidden_size}.csv", 'w', newline='')
+            csv_file = open(Path(output_dir) / f"figure_3_4_hs_{hidden_size}.csv", 'w', newline='')
             fieldnames = [
                 "BL", "hidden_size", "multimem_ctas", "correctness",
                 "pytorch_dist_ar_us", "multimem_ar_us",

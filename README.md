@@ -105,7 +105,7 @@ make clean
 make correctness_check # check output/ directory for the raw text generated
 make all # ~10 hours 48 minutes
 # To generate the figures piece-wise
-make figure_5_6_7 # 20 minutes
+make figure_3_4 # 20 minutes
 make table_1_figure_7 # 1 hour 25 minutes
 make figure_5 # 8 minutes
 make figure_1 # 3 hours 25 minutes

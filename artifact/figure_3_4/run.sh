@@ -12,7 +12,7 @@ torchrun \
     --rdzv-backend c10d --rdzv-endpoint localhost:0 \
     --no_python python3 "$script_name" \
     --hidden-size "$HIDDEN_SIZE" \
-    --output-dir "$RESULTS_DIR" > "$RESULTS_DIR/figure_5_6_7_hs_$HIDDEN_SIZE.txt" 2>&1
+    --output-dir "$RESULTS_DIR" > "$RESULTS_DIR/figure_3_4_hs_$HIDDEN_SIZE.txt" 2>&1
 
 sleep 3
 nvidia-smi -pm ENABLED

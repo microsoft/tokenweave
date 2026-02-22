@@ -2,7 +2,7 @@
 
 # ------------------ Configuration ------------------
 EVAL_DIR=$1
-MASTER_CSV="$EVAL_DIR/figure_2_11_summary.csv"
+MASTER_CSV="$EVAL_DIR/figure_2_10_summary.csv"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 OUTPUT_LEN=1
 BATCH_SIZE=1

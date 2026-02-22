@@ -86,8 +86,7 @@ def plot_graphs(data, gpu_count, models, graph_title, outdir):
     legend = fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.03), ncol=3, fontsize=legend_fontsize, frameon=False)
     fig.supxlabel("Seq Length", fontweight='bold', fontsize=28)
     axes[0].set_ylabel('Time (ms)', fontsize=28, fontweight='bold')
-    filename = f'figure_11a' if gpu_count == 8 else f'figure_11b'
-    pdf_path = os.path.join(outdir, f'{filename}.pdf')
+    pdf_path = os.path.join(outdir, f'figure_10.pdf')
     plt.savefig(pdf_path, dpi=1200)
     plt.close()
 
@@ -96,7 +95,7 @@ def main():
     indir = sys.argv[1]
     outdir = sys.argv[2]
     csvdir = sys.argv[3]
-    data_path = os.path.join(indir, 'figure_2_11_summary.csv')
+    data_path = os.path.join(indir, 'figure_2_10_summary.csv')
     data = pd.read_csv(data_path)
 
     os.makedirs(outdir, exist_ok=True)
@@ -110,7 +109,7 @@ def main():
     # Move 'model' column to the front
     cols_8 = ['model'] + [col for col in all_filtered_8.columns if col != 'model']
     all_filtered_8 = all_filtered_8[cols_8]
-    all_filtered_8.to_csv(os.path.join(csvdir, 'figure_11a.csv'), index=False)
+    all_filtered_8.to_csv(os.path.join(csvdir, 'figure_10.csv'), index=False)
     plot_graphs(data, 8, model_list_8, 'Prefill (8x H100)', outdir)
 
 if __name__ == '__main__':

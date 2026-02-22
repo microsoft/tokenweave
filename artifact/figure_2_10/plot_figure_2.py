@@ -105,7 +105,7 @@ def main():
     indir = sys.argv[1]
     outdir = sys.argv[2]
     csvdir = sys.argv[3]
-    data_path = os.path.join(indir, 'figure_2_11_summary.csv')
+    data_path = os.path.join(indir, 'figure_2_10_summary.csv')
     data = pd.read_csv(data_path)
 
     os.makedirs(outdir, exist_ok=True)

@@ -14,7 +14,7 @@ fi
 
 # ------------------ Configuration ------------------
 EVAL_DIR=$1
-MASTER_CSV="$EVAL_DIR/figure_12_summary.csv"
+MASTER_CSV="$EVAL_DIR/figure_8_summary.csv"
 DATASET_NAME=("random" "sharegpt")
 DATASET_PATH="$SHAREGPT_FILE_PATH"
 INPUT_LENS=(512 1024 2048)

@@ -5,7 +5,7 @@ CSVS   ?= csvs/
 TMP    ?= tmp/
 
 # Figure definitions
-FIGURES = figure_9 figure_5_6_7 figure_2_10 figure_1 figure_4_10 figure_12 figure_13
+FIGURES = figure_5 figure_5_6_7 figure_2_10 figure_1 figure_4_10 figure_8 figure_9
 
 # MODEL FILES
 PY_FILES := llama.py qwen2.py mixtral.py

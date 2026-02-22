@@ -259,7 +259,7 @@ def main(hidden_size: int, output_dir: str, atol: float, rtol: float):
     try:
         if dist.get_rank() == 0:
             Path(output_dir).mkdir(parents=True, exist_ok=True)
-            csv_file = open(Path(output_dir) / f"figure_4_10_hs_{hidden_size}.csv", 'w', newline='')
+            csv_file = open(Path(output_dir) / f"table_1_figure_7_hs_{hidden_size}.csv", 'w', newline='')
             fieldnames = [
                 "BL", "hidden_size", "multimem_ctas", "correctness",
                 "full_rms_norm_us", "partial_rms_norm_us", "torch_all_reduce_us",

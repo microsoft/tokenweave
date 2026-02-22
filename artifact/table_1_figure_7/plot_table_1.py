@@ -14,7 +14,7 @@ indir = sys.argv[1]
 outdir = sys.argv[2]
 csvdir = sys.argv[3]
 
-data_path = os.path.join(indir, 'figure_4_10_hs_8192.csv')
+data_path = os.path.join(indir, 'table_1_figure_7_hs_8192.csv')
 df = pd.read_csv(data_path)
 
 metrics = [
@@ -25,7 +25,7 @@ metrics = [
 
 df_min = df.groupby(['BL', 'hidden_size'])[metrics].min().reset_index()
 
-filtered_path = os.path.join(csvdir, 'figure_4.csv')
+filtered_path = os.path.join(csvdir, 'table_1.csv')
 df_min.to_csv(filtered_path, index=False)
 df_runtime = df_min
 
@@ -213,5 +213,5 @@ ax2.legend(
 
 plt.subplots_adjust(top=0.85, wspace=0.2)
 os.makedirs(outdir, exist_ok=True)
-out_path_pdf = os.path.join(outdir, "figure_4.pdf")
+out_path_pdf = os.path.join(outdir, "table_1.pdf")
 plt.savefig(out_path_pdf, bbox_inches='tight', dpi=1200)

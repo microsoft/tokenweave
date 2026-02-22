@@ -9,7 +9,7 @@ indir = sys.argv[1]
 outdir = sys.argv[2]
 csvdir = sys.argv[3]
 
-data_path = os.path.join(indir, 'figure_4_10_hs_8192.csv')
+data_path = os.path.join(indir, 'table_1_figure_7_hs_8192.csv')
 df = pd.read_csv(data_path)
 
 df = df.rename(columns={'BL': 'num_tokens'})
@@ -25,7 +25,7 @@ pivot_df = pivot_df.rename(columns={
     0: 'num_tokens_per_gpu',
     **{c: f'fused_arln_us_ctas_{int(c)}' for c in pivot_df.columns if isinstance(c, (int, float)) and c != 0}
 })
-pivot_path = os.path.join(csvdir, 'figure_10.csv')
+pivot_path = os.path.join(csvdir, 'figure_7.csv')
 pivot_df.to_csv(pivot_path, index=False)
 
 melted = pivot_df.melt(id_vars=['num_tokens', 'hidden_size'], var_name='ctas_col', value_name='fused_arln_us')
@@ -61,6 +61,6 @@ ax.tick_params(axis='both', labelsize=20)
 ax.grid(axis='y', linestyle='--', linewidth=1.0, alpha=0.5)
 
 plt.tight_layout()
-output_path = os.path.join(outdir, 'figure_10.pdf')
+output_path = os.path.join(outdir, 'figure_7.pdf')
 plt.savefig(output_path, bbox_inches='tight', dpi=1200)
 plt.close()

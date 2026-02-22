@@ -127,18 +127,6 @@ def main():
     all_filtered_8.to_csv(os.path.join(csvdir, 'figure_12a.csv'), index=False)
     plot_graphs(data, 8, model_list_8, 'Hybrid (8x H100)', outdir)
 
-    # Plot for GPU count 4
-    model_list_4 = ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct"]
-    all_filtered_4 = pd.concat([
-        filter_and_aggregate(data, model, 4).assign(model=model)
-        for model in model_list_4
-    ], ignore_index=True)
-    # Move 'model' to the first column
-    cols_4 = ['model'] + [col for col in all_filtered_4.columns if col != 'model']
-    all_filtered_4 = all_filtered_4[cols_4]
-    all_filtered_4.to_csv(os.path.join(csvdir, 'figure_12b.csv'), index=False)
-    plot_graphs(data, 4, model_list_4, 'Hybrid (4x H100)', outdir)
-
 
 if __name__ == '__main__':
     main()

@@ -91,7 +91,7 @@ def plot_graphs_3(data, gpu_count, outdir):
     ax.set_yticks(ax.get_yticks()) 
     ax.set_yticklabels(ax.get_yticks(), fontsize=25)
 
-    pdf_path = os.path.join(outdir, f'figure_3.pdf')
+    pdf_path = os.path.join(outdir, f'figure_1b.pdf')
     plt.savefig(pdf_path, dpi=1200, bbox_inches='tight')
     plt.close()
 
@@ -138,7 +138,7 @@ def plot_graphs_1(data, gpu_count, outdir):
     ax.set_yticks(ax.get_yticks()) 
     ax.set_yticklabels(ax.get_yticks(), fontsize=25)
 
-    pdf_path = os.path.join(outdir, f'figure_1.pdf')
+    pdf_path = os.path.join(outdir, f'figure_1a.pdf')
     plt.savefig(pdf_path, dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -149,7 +149,7 @@ def main():
     outdir = sys.argv[2]
     csvdir = sys.argv[3]
     NUM_RUNS = 5
-    data_path = [os.path.join(indir, f'figure_1_3_summary_{i+1}.csv') for i in range(NUM_RUNS)]
+    data_path = [os.path.join(indir, f'figure_1_summary_{i+1}.csv') for i in range(NUM_RUNS)]
     data = [pd.read_csv(path) for path in data_path]
 
     os.makedirs(outdir, exist_ok=True)

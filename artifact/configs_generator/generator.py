@@ -105,10 +105,6 @@ def main():
     # Process GPU count 8
     for model in ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct", "Mixtral-8x22B-Instruct-v0.1"]:
         create_json_config(data, model, 8, outdir)
-    
-    # Process GPU count 4
-    for model in ["Llama-3.3-70B-Instruct", "Qwen2.5-72B-Instruct"]:
-        create_json_config(data, model, 4, outdir)
 
 if __name__ == '__main__':
     main()

@@ -20,7 +20,7 @@ DATASET_PATH="$SHAREGPT_FILE_PATH"
 INPUT_LENS=(512 1024 2048)
 OUTPUT_LEN=128
 RANDOM_RANGE_RATIO=0.0 # FIXED P:D
-NUM_GPUS_LIST=(8 4)
+NUM_GPUS_LIST=(8)
 MODEL_NAME_LIST=("Llama-3.3-70B-Instruct" "Qwen2.5-72B-Instruct" "Mixtral-8x22B-Instruct-v0.1")
 BASELINE_IMPL_LIST=("no_ar" "baseline_multimem")
 OVERLAP_FUSED_IMPL_LIST=("overlap_fused")
@@ -157,11 +157,6 @@ for dataset_config in "${DATASET_CONFIGS[@]}"; do
         esac
 
         for gpus in "${NUM_GPUS_LIST[@]}"; do
-            if [[ "$gpus" -eq 4 ]] && [[ "$model" == "Mixtral-8x22B-Instruct-v0.1" ]]; then
-                log_info "Skipping Mixtral-8x22B-Instruct-v0.1 with 4 GPUs due to memory constraints."
-                continue
-            fi
-            
             # Baseline Implementations
             for impl in "${BASELINE_IMPL_LIST[@]}"; do
                 copy_model_files "$model" "$impl" "$src_dir" "$prefix" "$dst_file_path"

@@ -72,7 +72,7 @@ NUM_RUNS=5
 
 for ((i = 0; i < NUM_RUNS; i++)); do
     log_info "Run $((i + 1)) of $NUM_RUNS"
-    MASTER_CSV="$EVAL_DIR/figure_1_3_summary_$((i + 1)).csv"
+    MASTER_CSV="$EVAL_DIR/figure_1_summary_$((i + 1)).csv"
     init_benchmark
     for model in "${MODEL_NAME_LIST[@]}"; do
         case "$model" in
@@ -104,11 +104,6 @@ for ((i = 0; i < NUM_RUNS; i++)); do
         esac
 
         for gpus in "${NUM_GPUS_LIST[@]}"; do
-            if [ "$gpus" -eq 4 ] && [ "$model" == "Mixtral-8x22B-Instruct-v0.1" ]; then
-                log_info "Skipping Mixtral-8x22B-Instruct-v0.1 on 4 GPUs due to memory constraints."
-                continue
-            fi
-
             log_info "Running benchmark for $model on $gpus GPUs..."
             # Baseline Implementations
             for impl in "${BASELINE_IMPL_LIST[@]}"; do

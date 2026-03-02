@@ -39,7 +39,7 @@ To ease the setup, we recommend using either of these two Docker images:
 - `vllm/vllm-openai:v0.8.5`
 ```bash
 apt-get update; apt-get upgrade -y; apt-get install kmod git build-essential tmux -y   
-git clone https://github.com/microsoft/tokenweave.git
+git clone https://github.com/microsoft/tokenweave.git --single-branch -b artifact-evaluation
 cd tokenweave
 # Install miniconda; skip if already installed
 make install_miniconda # 30 seconds
@@ -63,19 +63,6 @@ make run_llama3
 # Note: vLLM version 0.8.5.post1 may also hang during model downloading, depending 
 # on the environment setup.
 ```
-**To Generate Tokenweave Configs (Optional)**
-
-If you want to generate TokenWeave configs for a new model, you can use the configs_generator script and modify it as needed. We have already provided configs for `LLama-3.3-70B`, `Qwen2.5-72B` and `Mixtral-8x22B` on 8xH100.
-
-```bash
-cd artifact
-tmux new -s tokenweave_session  # Start a new tmux session
-conda activate tokenweave       # Activate the conda environment
-# Run the following command in the tmux session to generate configs for
-# `LLaMA-3.3-70B`, `Qwen2.5-72B`, and `Mixtral-8x22B`
-make configs_generator          # Takes approximately 1 day
-cd .. # Go back to the tokenweave directory
-```
 
 **To profile using nsys**
 ```bash
@@ -90,7 +77,7 @@ nsys profile -o report.nsys-rep --trace-fork-before-exec=true --cuda-graph-trace
 
 Our evaluation includes two types of experiments:
 - Microbenchmark performance
- (Figures 1, 2, 4, 5, 6, and 7)
+ (Table 1, Figures 1, 2, 3, 4, 5, and 7)
 
 - End-to-end LLM performance
  (Figures 8, 9, and 10)
@@ -103,14 +90,14 @@ conda activate tokenweave # activate the conda environment
 # run the following commands in the tmux session
 make clean
 make correctness_check # check output/ directory for the raw text generated
-make all # ~10 hours 48 minutes
+make all # ~9 hours 25 minutes
 # To generate the figures piece-wise
 make figure_3_4 # 20 minutes
 make table_1_figure_7 # 1 hour 25 minutes
 make figure_5 # 8 minutes
 make figure_1 # 3 hours 25 minutes
-make figure_2_10 # 1 hour 10 minutes
-make figure_8 # 2 hours 34 minutes
+make figure_2_10 # 42 minutes
+make figure_8 # 1 hour 32 minutes
 make figure_9 # 1 hour 52 minutes
 ```
 The artifact scripts redirect the raw output numbers and logs to the `output/` folder, while the plotted graphs are stored

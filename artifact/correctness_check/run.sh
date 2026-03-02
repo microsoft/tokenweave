@@ -72,7 +72,7 @@ for model in "${MODEL_NAME_LIST[@]}"; do
             extra_args="--tokenizer-mode mistral"
             ;;
         *)
-            log_info "Unknown model: $model"
+            echo "[INFO] Unknown model: $model"
             continue
             ;;
     esac

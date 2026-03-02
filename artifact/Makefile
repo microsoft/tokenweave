@@ -74,7 +74,7 @@ help:
 	@echo "  all              - Build all figures sequentially (default)"
 	@echo "  run_all          - Run all figure computations sequentially"
 	@echo "  gen_all          - Generate all plots sequentially"
-	@echo "  <figure_name>    - Build specific figure (e.g., make figure_5_6_7)"
+	@echo "  <figure_name>    - Build specific figure (e.g., make figure_3_4)"
 	@echo "  correctness_check - Run correctness check"
 	@echo "  clean            - Remove generated files"
 	@echo "  help             - Show this help message"

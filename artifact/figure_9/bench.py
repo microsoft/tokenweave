@@ -158,7 +158,7 @@ def main(hidden_size: int, output_dir: str, atol: float, rtol: float):
     try:
         if dist.get_rank() == 0:
             Path(output_dir).mkdir(parents=True, exist_ok=True)
-            csv_file = open(Path(output_dir) / f"figure_5_hs_{hidden_size}.csv", 'w', newline='')
+            csv_file = open(Path(output_dir) / f"figure_9_hs_{hidden_size}.csv", 'w', newline='')
             fieldnames = [
                 "BL", "hidden_size",
                 "baseline_us", "smart_us",

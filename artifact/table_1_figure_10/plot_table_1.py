@@ -14,7 +14,7 @@ indir = sys.argv[1]
 outdir = sys.argv[2]
 csvdir = sys.argv[3]
 
-data_path = os.path.join(indir, 'table_1_figure_7_hs_8192.csv')
+data_path = os.path.join(indir, 'table_1_figure_10_hs_8192.csv')
 df = pd.read_csv(data_path)
 
 metrics = [

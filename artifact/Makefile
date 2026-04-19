@@ -5,7 +5,7 @@ CSVS   ?= csvs/
 TMP    ?= tmp/
 
 # Figure definitions
-FIGURES = figure_5 figure_3_4 figure_2_10 figure_1 table_1_figure_7 figure_8 figure_9
+FIGURES = figure_9 figure_4_6 figure_2_13 figure_1 table_1_figure_10 figure_11 figure_12
 
 # MODEL FILES
 PY_FILES := llama.py qwen2.py mixtral.py
@@ -74,7 +74,7 @@ help:
 	@echo "  all              - Build all figures sequentially (default)"
 	@echo "  run_all          - Run all figure computations sequentially"
 	@echo "  gen_all          - Generate all plots sequentially"
-	@echo "  <figure_name>    - Build specific figure (e.g., make figure_3_4)"
+	@echo "  <figure_name>    - Build specific figure (e.g., make figure_4_6)"
 	@echo "  correctness_check - Run correctness check"
 	@echo "  clean            - Remove generated files"
 	@echo "  help             - Show this help message"

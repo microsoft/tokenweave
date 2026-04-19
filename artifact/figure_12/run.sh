@@ -14,16 +14,17 @@ fi
 
 # ------------------ Configuration ------------------
 EVAL_DIR=$1
-MASTER_CSV="$EVAL_DIR/figure_8_summary.csv"
+MASTER_CSV="$EVAL_DIR/figure_12_summary.csv"
 DATASET_NAME=("random" "sharegpt")
 DATASET_PATH="$SHAREGPT_FILE_PATH"
 INPUT_LENS=(512 1024 2048)
 OUTPUT_LEN=128
 RANDOM_RANGE_RATIO=0.0 # FIXED P:D
 NUM_GPUS_LIST=(8)
-MODEL_NAME_LIST=("Llama-3.3-70B-Instruct" "Qwen2.5-72B-Instruct" "Mixtral-8x22B-Instruct-v0.1")
+MODEL_NAME_LIST=("Llama-3.3-70B-Instruct")
 BASELINE_IMPL_LIST=("no_ar" "baseline_multimem")
 OVERLAP_FUSED_IMPL_LIST=("overlap_fused")
+CHUNKED_PREFILL_SIZES_LIST=(1024 2048 4096 8192)
 extra_args=""
 
 # ------------------ Environment Setup ------------------
@@ -40,7 +41,7 @@ log_info() {
 
 init_benchmark() {
     mkdir -p "$EVAL_DIR"
-    echo "model_name,gpu_count,dataset,input_len,output_len,impl,requests_per_sec,total_tokens_per_sec,output_tokens_per_sec,total_prompt_tokens,total_output_tokens" > "$MASTER_CSV"
+    echo "model_name,gpu_count,cs,dataset,input_len,output_len,impl,requests_per_sec,total_tokens_per_sec,output_tokens_per_sec,total_prompt_tokens,total_output_tokens" > "$MASTER_CSV"
 }
 
 copy_model_files() {
@@ -50,7 +51,7 @@ copy_model_files() {
 }
 
 extract_throughput() {
-    local output_log=$1 model=$2 gpus=$3 impl=$4 dataset=$5 input_len=$6 output_len=$7
+    local output_log=$1 model=$2 gpus=$3 impl=$4 dataset=$5 input_len=$6 output_len=$7 chunked_prefill_size=$8
 
     # Extract throughput and token information in a single pass
     while read -r line; do
@@ -66,7 +67,7 @@ extract_throughput() {
     done < <(grep -E "Throughput:|Total num prompt tokens:|Total num output tokens:" "$output_log")
 
     # Print the combined CSV row
-    echo "$model,$gpus,$dataset,$input_len,$output_len,$impl,$requests_per_sec,$total_tokens_per_sec,$output_tokens_per_sec,$total_prompt_tokens,$total_output_tokens" >> "$MASTER_CSV"
+    echo "$model,$gpus,$chunked_prefill_size,$dataset,$input_len,$output_len,$impl,$requests_per_sec,$total_tokens_per_sec,$output_tokens_per_sec,$total_prompt_tokens,$total_output_tokens" >> "$MASTER_CSV"
 }
 
 
@@ -84,7 +85,7 @@ run_benchmark_sharegpt() {
         --disable-custom-all-reduce --max-num-batched-tokens "$chunked_prefill_size" \
         --no-enable-prefix-caching $extra_args | tee -a "$output_log"
 
-    extract_throughput "$output_log" "$model" "$gpus" "$impl" "$dataset" "$input_len" "$output_len"
+    extract_throughput "$output_log" "$model" "$gpus" "$impl" "$dataset" "$input_len" "$output_len" "$chunked_prefill_size"
 
     rm -rf "$dir"
 }
@@ -102,7 +103,7 @@ run_benchmark_random() {
         --disable-custom-all-reduce --max-num-batched-tokens "$chunked_prefill_size" \
         --no-enable-prefix-caching $extra_args | tee -a "$output_log"
 
-    extract_throughput "$output_log" "$model" "$gpus" "$impl" "$dataset" "$input_len" "$output_len"
+    extract_throughput "$output_log" "$model" "$gpus" "$impl" "$dataset" "$input_len" "$output_len" "$chunked_prefill_size"
     rm -rf "$dir"
 }
 
@@ -112,18 +113,11 @@ run_benchmark_random() {
 log_info "Setting up the environment..."
 init_benchmark
 
-chunked_prefill_size=2048
-
 # Combine random input lengths and sharegpt into one loop
 DATASET_CONFIGS=("${INPUT_LENS[@]}" "sharegpt")
 
 for dataset_config in "${DATASET_CONFIGS[@]}"; do
-    if [[ "$dataset_config" == "sharegpt" ]]; then
-        cp -r "$SCRIPT_DIR/hybrid_configs/sharegpt/"* "$SCRIPT_DIR/../../vllm/tokenweave_configs/"
-    else
-        cp -r "$SCRIPT_DIR/hybrid_configs/$dataset_config-128/"* "$SCRIPT_DIR/../../vllm/tokenweave_configs/"
-    fi
-
+    cp -f "$SCRIPT_DIR/hybrid_configs/llama_config_8_$dataset_config.json" "$SCRIPT_DIR/../../vllm/tokenweave_configs/llama_config_8.json"
     for model in "${MODEL_NAME_LIST[@]}"; do
         case "$model" in
             "Llama-3.3-70B-Instruct")
@@ -132,7 +126,6 @@ for dataset_config in "${DATASET_CONFIGS[@]}"; do
                 src_dir="$SCRIPT_DIR/../llama_src_files"
                 dst_file_path="${SCRIPT_DIR}/../../vllm/model_executor/models/llama.py"
                 extra_args=""
-                chunked_prefill_size=2048
                 ;;
             "Qwen2.5-72B-Instruct")
                 model_path="Qwen/Qwen2.5-72B-Instruct"
@@ -140,7 +133,6 @@ for dataset_config in "${DATASET_CONFIGS[@]}"; do
                 src_dir="$SCRIPT_DIR/../qwen2_src_files"
                 dst_file_path="${SCRIPT_DIR}/../../vllm/model_executor/models/qwen2.py"
                 extra_args=""
-                chunked_prefill_size=2048
                 ;;
             "Mixtral-8x22B-Instruct-v0.1")
                 model_path="mistralai/Mixtral-8x22B-Instruct-v0.1"
@@ -148,7 +140,6 @@ for dataset_config in "${DATASET_CONFIGS[@]}"; do
                 src_dir="$SCRIPT_DIR/../mixtral_src_files"
                 dst_file_path="${SCRIPT_DIR}/../../vllm/model_executor/models/mixtral.py"
                 extra_args="--tokenizer-mode mistral"
-                chunked_prefill_size=4096
                 ;;
             *)
                 log_info "Unknown model: $model"
@@ -157,26 +148,28 @@ for dataset_config in "${DATASET_CONFIGS[@]}"; do
         esac
 
         for gpus in "${NUM_GPUS_LIST[@]}"; do
-            # Baseline Implementations
-            for impl in "${BASELINE_IMPL_LIST[@]}"; do
-                copy_model_files "$model" "$impl" "$src_dir" "$prefix" "$dst_file_path"
-                
-                if [[ "$dataset_config" == "sharegpt" ]]; then
-                    run_benchmark_sharegpt "$model_path" "$model" "$gpus" "$impl" "sharegpt" "" "" "$extra_args" "$chunked_prefill_size"
-                else
-                    run_benchmark_random "$model_path" "$model" "$gpus" "$impl" "random" "$dataset_config" "$OUTPUT_LEN" "$extra_args" "$chunked_prefill_size"
-                fi
-            done
+            for chunked_prefill_size in "${CHUNKED_PREFILL_SIZES_LIST[@]}"; do
+                # Baseline Implementations
+                for impl in "${BASELINE_IMPL_LIST[@]}"; do
+                    copy_model_files "$model" "$impl" "$src_dir" "$prefix" "$dst_file_path"
+                    
+                    if [[ "$dataset_config" == "sharegpt" ]]; then
+                        run_benchmark_sharegpt "$model_path" "$model" "$gpus" "$impl" "sharegpt" "" "" "$extra_args" "$chunked_prefill_size"
+                    else
+                        run_benchmark_random "$model_path" "$model" "$gpus" "$impl" "random" "$dataset_config" "$OUTPUT_LEN" "$extra_args" "$chunked_prefill_size"
+                    fi
+                done
 
-            # Overlap Fused Implementations
-            for impl in "${OVERLAP_FUSED_IMPL_LIST[@]}"; do
-                copy_model_files "$model" "$impl" "$src_dir" "$prefix" "$dst_file_path"
-                
-                if [[ "$dataset_config" == "sharegpt" ]]; then
-                    run_benchmark_sharegpt "$model_path" "$model" "$gpus" "$impl" "sharegpt" "" "" "$extra_args" "$chunked_prefill_size"
-                else
-                    run_benchmark_random "$model_path" "$model" "$gpus" "$impl" "random" "$dataset_config" "$OUTPUT_LEN" "$extra_args" "$chunked_prefill_size"
-                fi
+                # Overlap Fused Implementations
+                for impl in "${OVERLAP_FUSED_IMPL_LIST[@]}"; do
+                    copy_model_files "$model" "$impl" "$src_dir" "$prefix" "$dst_file_path"
+                    
+                    if [[ "$dataset_config" == "sharegpt" ]]; then
+                        run_benchmark_sharegpt "$model_path" "$model" "$gpus" "$impl" "sharegpt" "" "" "$extra_args" "$chunked_prefill_size"
+                    else
+                        run_benchmark_random "$model_path" "$model" "$gpus" "$impl" "random" "$dataset_config" "$OUTPUT_LEN" "$extra_args" "$chunked_prefill_size"
+                    fi
+                done
             done
         done
         rm -rf "$EVAL_DIR/$model"

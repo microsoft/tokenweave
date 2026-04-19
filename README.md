@@ -77,10 +77,10 @@ nsys profile -o report.nsys-rep --trace-fork-before-exec=true --cuda-graph-trace
 
 Our evaluation includes two types of experiments:
 - Microbenchmark performance
- (Table 1, Figures 1, 2, 3, 4, 5, and 7)
+ (Table 1, Figures 1, 2, 4, 6, 9, and 10)
 
 - End-to-end LLM performance
- (Figures 8, 9, and 10)
+ (Figures 11, 12, and 13)
 
 To reproduce the results, use the `Makefile` in the `artifact/` directory:
 ```bash
@@ -92,13 +92,13 @@ make clean
 make correctness_check # check output/ directory for the raw text generated
 make all # ~9 hours 25 minutes
 # To generate the figures piece-wise
-make figure_3_4 # 20 minutes
-make table_1_figure_7 # 1 hour 25 minutes
-make figure_5 # 8 minutes
+make figure_4_6 # 20 minutes
+make table_1_figure_10 # 1 hour 25 minutes
+make figure_9 # 8 minutes
 make figure_1 # 3 hours 25 minutes
-make figure_2_10 # 42 minutes
-make figure_8 # 1 hour 32 minutes
-make figure_9 # 1 hour 52 minutes
+make figure_2_13 # 42 minutes
+make figure_11 # 1 hour 32 minutes
+make figure_12 # 1 hour 52 minutes
 ```
 The artifact scripts redirect the raw output numbers and logs to the `output/` folder, while the plotted graphs are stored
 in the `graphs/` folder. CSV files for the figures can be found in the `csvs/` directory. Results may show minor runtime 
